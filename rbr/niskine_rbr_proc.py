@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.6.0
+#       jupytext_version: 1.7.1
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -26,20 +26,18 @@ import pyrsktools
 import os
 
 import gvpy as gv
-import rbr
-
-# from pytowyo.io import read_rbr_solo
+import rbrmoored as rbr
 
 # %reload_ext autoreload
 # %autoreload 2
-# %autosave 0
+# %autosave 300
 # %config InlineBackend.figure_format = 'retina'
 
 # %% [markdown]
 # Path to .rsk files
 
 # %%
-rbrdir = Path('/Users/gunnar/Projects/niskin/data/NISKINe/Moorings/NISKINe2020/RBR/raw/')
+rbrdir = Path('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/RBRSolo/raw/')
 
 # %% [markdown]
 # Time of pool calibration after recovery
@@ -51,16 +49,14 @@ caltime = np.datetime64('2020-10-09 20:43:00')
 # Processing parameters
 
 # %%
-data_out = Path('/Users/gunnar/Projects/niskin/data/NISKINe/Moorings/NISKINe2020/RBR/proc/')
-figure_out = Path('/Users/gunnar/Projects/niskin/data/NISKINe/Moorings/NISKINe2020/RBR/fig/')
+data_out = Path('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/RBRSolo/proc/')
+figure_out = Path('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/RBRSolo/fig')
+# Create directories if needed
+for d in [data_out, figure_out]:
+    d.mkdir(exist_ok=True)
 
 # %% [markdown]
 # ## Processed Files
-
-# %%
-# this one processed before time cal
-solofile = rbrdir.joinpath('072146_20201008_2045.rsk')
-solo = rbr.solo.proc(solofile, data_out, figure_out, cal_time=caltime, show_plot=True)
 
 # %%
 solofile = rbrdir.joinpath('072214_20201010_0320.rsk')
@@ -178,16 +174,89 @@ solo = rbr.solo.proc(solofile, data_out, figure_out, cal_time=caltime, show_plot
 # ## Problem Childs
 
 # %% [markdown]
-# ### 72167
+# ### 72146
 #
-# Does not show a time offset. File size smaller than other thermistors - possibly dead before end of deployment?
+# The noted time offset is wrong - likely due to the wrong time on the download computer. The time on the download computer was about 42s behind UTC (see notes for SBE56).
 
 # %%
 # this one processed before time cal
-# does not have a time offset
+solofile = rbrdir.joinpath('072146_20201008_2045.rsk')
+solo = rbr.solo.proc(solofile, show_plot=False, apply_time_offset=False)
+
+# %% [markdown]
+# Subtracting 42s from the time offset (54843ms) leaves about 12s. This seems to make more sense when comparing the temperature signal at mooring release time with thermistors below.
+
+# %%
+below2 = xr.open_dataarray('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/RBRSolo/proc/072180_20201010_1141.nc')
+
+# %%
+below3 = xr.open_dataarray('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/RBRSolo/proc/072187_20201010_0947.nc')
+
+# %%
+below4 = xr.open_dataarray('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/RBRSolo/proc/072210_20201010_1648.nc')
+
+# %%
+# timesel = slice('2020-10-05 00:00', '2020-10-05 23:59')
+# fig, ax = gv.plot.quickfig()
+# solo.sel(time=timesel).plot(label=solo.attrs['SN'])
+# below2.sel(time=timesel).plot(label=below2.attrs['SN'])
+# below3.sel(time=timesel).plot(label=below3.attrs['SN'])
+# below4.sel(time=timesel).plot(label=below4.attrs['SN'])
+# ax.legend()
+
+# %%
+solo.attrs['time drift in ms'] = 12000
+
+# %%
+solo = rbr.solo.time_offset(solo)
+
+# %% [markdown]
+# Looks ok. Save.
+
+# %%
+rbr.solo.save_nc(solo, data_out=data_out)
+
+# %%
+rbr.solo.plot(solo, figure_out=figure_out)
+
+# %%
+sn72146 = xr.open_dataarray('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/RBRSolo/proc/072146_20201008_2045.nc')
+
+# %% [markdown]
+# ### 72167
+#
+# Does not show a time offset. File size smaller than other thermistors.
+
+# %%
+# this instrument was downloaded before the clock calibration,
+# so no reference time exists
 solofile = rbrdir.joinpath('072167_20201008_2230.rsk')
-# rsk, data = rbr.solo.read_rsk(solofile)
-solo = rbr.solo.proc(solofile, data_out=data_out, figure_out=figure_out, cal_time=caltime, show_plot=True)
+solo = rbr.solo.proc(solofile, show_plot=True)
+
+# %% [markdown]
+# Compare with 72180 (20m below). 72146 (10m below) would be closer, but it also was downloaded on the faulty computer and may not be as accurate.
+
+# %%
+# timesel = slice('2020-10-05 00:00', '2020-10-05 23:59')
+# fig, ax = gv.plot.quickfig()
+# solo.sel(time=timesel).plot(label=solo.attrs['SN'])
+# sn72146.sel(time=timesel).plot(label=sn72146.attrs['SN'])
+# below2.sel(time=timesel).plot(label=below2.attrs['SN'])
+# below3.sel(time=timesel).plot(label=below3.attrs['SN'])
+# below4.sel(time=timesel).plot(label=below4.attrs['SN'])
+# ax.legend()
+
+# %% [markdown]
+# Comparing with instruments below, it appears there is not much of a time drift to correct for.
+
+# %%
+rbr.solo.save_nc(solo, data_out=data_out)
+
+# %%
+rbr.solo.plot(solo, figure_out=figure_out)
+
+# %%
+sn72167 = xr.open_dataarray('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/RBRSolo/proc/072167_20201008_2230.nc')
 
 # %% [markdown]
 # ### 76611
@@ -198,20 +267,37 @@ solo = rbr.solo.proc(solofile, data_out=data_out, figure_out=figure_out, cal_tim
 solofile = rbrdir.joinpath('076611_20201009_1500.rsk')
 
 # %%
-solo = rbr.solo.proc(solofile, data_out=data_out, figure_out=figure_out, cal_time=caltime, show_plot=True)
+solo = rbr.solo.proc(solofile, show_plot=True)
+
+# %% [markdown]
+# Compare with other thermistors. 
 
 # %%
-# solofile = rbrdir.joinpath('076611_20201009_0634.rsk')
-solofile2 = rbrdir.joinpath('AUTO_076611_20201009 0510.rsk')
-# solofile3 = rbrdir.joinpath('AUTO_076611_20201008 2310.rsk')
+# timesel = slice('2020-10-08 09:20', '2020-10-08 10:55')
+# # timesel = slice('2020-10-05 00:00', '2020-10-05 23:59')
+# fig, ax = gv.plot.quickfig()
+# solo.sel(time=timesel).plot(label=solo.attrs['SN'])
+# sn72146.sel(time=timesel).plot(label=sn72146.attrs['SN'])
+# sn72167.sel(time=timesel).plot(label=sn72167.attrs['SN'])
+# below2.sel(time=timesel).plot(label=below2.attrs['SN'])
+# below3.sel(time=timesel).plot(label=below3.attrs['SN'])
+# below4.sel(time=timesel).plot(label=below4.attrs['SN'])
+# ax.legend()
+
+# %% [markdown]
+# Looks like a clock drift of 10s.
 
 # %%
-test = rbr.solo.read_rsk(solofile2)
+solo.attrs['time drift in ms'] = 10000
 
 # %%
-rsk, data = test
+solo = rbr.solo.time_offset(solo)
+
+# %% [markdown]
+# Looks ok. Save.
 
 # %%
-rsk.deployment.download_time
+rbr.solo.save_nc(solo, data_out=data_out)
 
 # %%
+rbr.solo.plot(solo, figure_out=figure_out)
