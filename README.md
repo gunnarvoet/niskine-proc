@@ -22,6 +22,8 @@ Some of the time series end early or have gaps. Not sure how to go about applyin
 ### RBR
 Processing mostly done.
 
-**Outstanding issues:** No time offset for **72167**, **76611**.
+**Issues:** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved.
+
+Time offset for **72167** is determined by comparison with **72146** (located 10m below on the mooring). Comparing their time series while sitting in the lab after recovery shows a pretty reliable clock drift of 45s for this instrument. This time offset has been applied.
 
 ### Chipod
