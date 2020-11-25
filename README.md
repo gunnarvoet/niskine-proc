@@ -23,7 +23,6 @@ Some of the time series end early or have gaps. Not sure how to go about applyin
 Processing done.
 
 **Issues:** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved. Wrong time offset for **72146**, also due to misbehaving computer. Unfortunately, these instruments were not in the included in the clock calibration (warm water dip).
-
-Time offsets for all three instruments were determined by comparison with a few instruments below.
+Time offsets for all three instruments (72146: 12s, 72167: 0s, 76611: 10s) were determined by comparison with a few instruments below.
 
 ### Chipod
