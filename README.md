@@ -20,10 +20,10 @@ Processing mostly done.
 Some of the time series end early or have gaps. Not sure how to go about applying the time offset in these cases. Need to look into this. Looks like the instruments ran out of battery. Now terminating the time series where the first gaps start to show up.
 
 ### RBR
-Processing mostly done.
+Processing done.
 
-**Issues:** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved.
+**Issues:** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved. Wrong time offset for **72146**, also due to misbehaving computer. Unfortunately, these instruments were not in the included in the clock calibration (warm water dip).
 
-Time offset for **72167** is determined by comparison with **72146** (located 10m below on the mooring). Comparing their time series while sitting in the lab after recovery shows a pretty reliable clock drift of 45s for this instrument. This time offset has been applied.
+Time offsets for all three instruments were determined by comparison with a few instruments below.
 
 ### Chipod
