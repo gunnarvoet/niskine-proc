@@ -1,3 +1,7 @@
+# This file is excluded from being tracked in git by running
+# `git update-index --assume-unchanged environment.yml`
+# on the command line. This can be undone with
+# `git update-index --no-assume-unchanged environment.yml`
 name: niskine-proc
 channels:
   - conda-forge
@@ -22,5 +26,7 @@ dependencies:
   - pip:
     - jupytext
     - pyrsktools
-    - "-e /Users/gunnar/Projects/python/gvpy"
-    - "-e /Users/gunnar/Projects/python/rbrmoored"
+    - watchmagic
+    - "-e git+https://github.com/gunnarvoet/gvpy#egg=gvpy"
+    - "-e git+https://github.com/gunnarvoet/rbrmoored#egg=rbrmoored"
+    - "-e git+https://github.com/gunnarvoet/sbemoored#egg=sbemoored"
