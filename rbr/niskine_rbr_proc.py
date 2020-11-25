@@ -225,7 +225,7 @@ sn72146 = xr.open_dataarray('/Users/gunnar/Projects/niskine/data/Moorings/NISKIN
 # %% [markdown]
 # ### 72167
 #
-# Does not show a time offset. File size smaller than other thermistors.
+# Does not show a time offset.
 
 # %%
 # this instrument was downloaded before the clock calibration,
