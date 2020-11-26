@@ -1,4 +1,5 @@
 # Makefile for NISKINe moored data processing
+# NOTE: Needs GNU make version 4.3 or higher to work properly
 
 # User name for the server is stored in credentials file that
 # is included here. Change it to reflect your user name on kipapa.
@@ -72,11 +73,23 @@ RBR_RAW_FILES := $(wildcard $(LOCAL_DATA)Moorings/NISKINE19/M1/RBRSolo/raw/*.rsk
 RBR_PROC_FILES = $(subst raw,proc,$(subst .rsk,.nc,$(RBR_RAW_FILES)))
 
 ## proc_rbr          : Process RBRSolo data
+.PHONY : proc_rbr
 proc_rbr : $(RBR_PROC_FILES)
-$(RBR_PROC_FILES) : $(PROC_DIR)rbr/niskine_rbr_proc.py $(RBR_RAW_FILES)
-	@echo $@
+$(RBR_PROC_FILES) &: $(PROC_DIR)rbr/niskine_rbr_proc.py $(RBR_RAW_FILES)
+	@echo 'processing RBR Solo files'
 	python $<
 
 # }}}
 
+# PROCESS SBE56 DATA {{{
+SBE56_RAW_FILES := $(wildcard $(LOCAL_DATA)Moorings/NISKINE19/M1/SBE56/raw/csv/*.csv)
+SBE56_PROC_FILES := $(subst raw/csv,proc,$(subst .csv,.nc,$(SBE56_RAW_FILES)))
 
+## proc_sbe56        : Process SBE56 data
+.PHONY: proc_sbe56
+proc_sbe56 : $(SBE56_PROC_FILES)
+$(SBE56_PROC_FILES) &: $(PROC_DIR)sbe56/niskine_sbe56_proc.py $(SBE56_RAW_FILES)
+	@echo 'processing SBE 56 files'
+	python $<
+
+# }}}
