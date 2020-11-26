@@ -3,6 +3,8 @@ NISKINe Mooring Data Processing
 
 Python processing files were written in jupyter notebooks and converted to python scripts using [jupytext](https://jupytext.readthedocs.io/en/latest/). They can be converted back to jupyter notebooks.
 
+The Makefile bundles a number of data syncronization and processing steps. Note that you need GNU make version 4.3 or higher for this to work properly. On Macs, this can be installed via `brew install make` using homebrew.
+
 ### CTD
 Need to process cast nearby M1.
 
