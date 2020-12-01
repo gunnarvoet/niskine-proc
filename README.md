@@ -5,7 +5,7 @@ Python processing files were written in jupyter notebooks and converted to pytho
 
 A conda environment with all packages needed for running the python processing scripts can be created by running `conda env create -f environemnt.yml`. The environment will be called `niskine-proc`.
 
-The Makefile bundles a number of data syncronization and processing steps. Note that you need GNU make version 4.3 or higher for this to work properly. On Macs, this can be installed via `brew install make` using homebrew.
+The `Makefile` bundles a number of data syncronization and processing steps. Note that you need GNU make version 4.3 or higher for this to work properly. On Macs, this can be installed via `brew install make` using homebrew. Type `make help` to see various options.
 
 ### CTD
 Need to process cast nearby M1.
