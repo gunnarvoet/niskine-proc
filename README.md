@@ -3,6 +3,8 @@ NISKINe Mooring Data Processing
 
 Python processing files were written in jupyter notebooks and converted to python scripts using [jupytext](https://jupytext.readthedocs.io/en/latest/). They can be converted back to jupyter notebooks.
 
+A conda environment with all packages needed for running the python processing scripts can be created by running `conda env create -f environemnt.yml`. The environment will be called `niskine-proc`.
+
 The Makefile bundles a number of data syncronization and processing steps. Note that you need GNU make version 4.3 or higher for this to work properly. On Macs, this can be installed via `brew install make` using homebrew.
 
 ### CTD
@@ -34,7 +36,7 @@ Some of the time series end early or have gaps. Not sure how to go about applyin
 ### RBR
 Processing done.
 
-**Issues:** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved. Wrong time offset for **72146**, also due to misbehaving computer. Unfortunately, these instruments were not in the included in the clock calibration (warm water dip).
+**Issues (solved):** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved. Wrong time offset for **72146**, also due to misbehaving computer. Unfortunately, these instruments were not in the included in the clock calibration (warm water dip).
 Time offsets for all three instruments (72146: 12s, 72167: 0s, 76611: 10s) were determined by comparison with a few instruments below.
 
 
