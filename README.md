@@ -35,13 +35,13 @@ The clocks of the affected instruments still seemed fine on recovery, time offse
 
 
 ### SBE56
-Processing mostly done.
-
-Some of the time series end early or have gaps. Not sure how to go about applying the time offset in these cases. Need to look into this.
+Some of the time series have gaps. The time stamps seem ok, but need to look into this. First step is to try re-downloading to see if anything went wrong there.
 
 
 ### RBR
 Processing done.
+
+Some of the processing code lives in https://github.com/gunnarvoet/rbrmoored.
 
 **Issues (solved):** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved. Wrong time offset for **72146**, also due to misbehaving computer. Unfortunately, these instruments were not in the included in the clock calibration (warm water dip).
 Time offsets for all three instruments (72146: 12s, 72167: 0s, 76611: 10s) were determined by comparison with a few instruments below.
