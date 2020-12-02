@@ -63,25 +63,10 @@ def construct_37_paths(sn, mooring):
 
 
 # %% [markdown]
-# Test:
-
-# %%
-data_raw, raw_file, data_out, fig_out = construct_37_paths(12710, 'M1')
-
-# %%
-print(raw_file)
-
-# %%
-print(data_out)
-
-# %%
-print(fig_out)
-
-# %% [markdown]
 # ## Read time offsets
 
 # %%
-offset_file = 'SBE37_time_offsets.txt'
+offset_file = NISKINe_data.joinpath('SBE37_time_offsets.txt')
 
 # %%
 time_offsets = pd.read_csv(offset_file, engine='python', header=0, delim_whitespace=True, parse_dates={'utc': [3, 4], 'inst': [1, 2]}, index_col='SN')

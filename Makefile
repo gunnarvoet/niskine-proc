@@ -93,3 +93,13 @@ $(SBE56_PROC_FILES) &: $(PROC_DIR)sbe56/niskine_sbe56_proc.py $(SBE56_RAW_FILES)
 	python $<
 
 # }}}
+
+# PROCESS SBE37 DATA {{{
+
+## proc_sbe37        : Process SBE37 data
+.PHONY: proc_sbe37
+proc_sbe37 : $(PROC_DIR)sbe37/niskine_sbe37_proc.py
+	@echo 'processing SBE 37 files'
+	python $<
+
+# }}}
