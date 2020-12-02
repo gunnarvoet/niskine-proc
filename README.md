@@ -18,13 +18,20 @@ Need to process cast nearby M1.
 
 
 ### SBE37
-Processing mostly done.
+Processing done.
+
+Some of the processing code lives in https://github.com/gunnarvoet/sbemoored.
 
 **2864, 3638, 4922, 4923** worked fine.
 
-**Issues:** **12710, 12711 and 12712** stop sampling at their specified rate pre-maturely. Most likely due to drained batteries. They come back to sampling and all instruments have the recovery recorded, but there are jumps in the time series and the time series are too short. Need to cut them until the point where they first start to drop out. The clocks still seemed fine on recovery, scale the time offset to the good part of the time series.
+**Issues (solved):** **12710, 12711** and **12712** stop sampling at their specified rate pre-maturely. Most likely due to drained batteries - apparently the little tool Seabird provides for calculating instrument endurance isn't that good and one has to be more conservative. The instruments come back to sampling and all of them have data recorded during the time of mooring recovery, but there are gaps in the time series and the time stamps are wrong once data start to drop out. The time series are now cut short at the point where they first start to drop out. The following times for cutting the time series short were determined by comparison with **2864** on the same mooring:
+| SN  | last good data |
+|-----|----------------|
+|12710|2020-02-09 21:00|
+|12711|2020-03-17 12:00|
+|12712|2020-01-16 23:15|
 
-Time of first battery failure now determined for each of these by comparison with **2864** on the same mooring.
+The clocks of the affected instruments still seemed fine on recovery, time offsets were scaled linearly to the good part of the time series.
 
 
 ### SBE56
