@@ -1,11 +1,11 @@
 NISKINe Mooring Data Processing
 ===============================
 
-Python processing files were written in jupyter notebooks and converted to python scripts using [jupytext](https://jupytext.readthedocs.io/en/latest/). They can be converted back to jupyter notebooks.
+Python processing files were written in Jupyter notebooks and converted to python scripts using [jupytext](https://jupytext.readthedocs.io/en/latest/). They can be converted back to Jupyter notebooks.
 
-A conda environment with all packages needed for running the python processing scripts can be created by running `conda env create -f environemnt.yml`. The environment will be called `niskine-proc`.
+A [conda](https://docs.conda.io/en/latest/) environment with all packages needed for running the python processing scripts can be created by running `conda env create -f environemnt.yml`. The newly created environment will be called `niskine-proc`.
 
-The `Makefile` bundles a number of data syncronization and processing steps. Note that you need GNU make version 4.3 or higher for this to work properly. On Macs, this can be installed via `brew install make` using homebrew. Type `make help` to see various options.
+The `Makefile` bundles a number of data synchronization and processing steps. Note that you need GNU make version 4.3 or higher for this to work properly. On Macs, this can be installed via `brew install make` using [homebrew](https://brew.sh/). Type `make help` to see various options for running the Makefile.
 
 ### CTD
 Need to process cast nearby M1.
@@ -20,7 +20,7 @@ Need to process cast nearby M1.
 ### SBE37
 Processing done.
 
-Some of the processing code lives in https://github.com/gunnarvoet/sbemoored.
+Some of the processing code lives in a separate repository at https://github.com/gunnarvoet/sbemoored.
 
 **2864, 3638, 4922, 4923** worked fine.
 
@@ -35,13 +35,26 @@ The clocks of the affected instruments still seemed fine on recovery, time offse
 
 
 ### SBE56
-Some of the time series have gaps. The time stamps seem ok, but need to look into this. First step is to try re-downloading to see if anything went wrong there.
+Processing done.
+
+Some of the processing code lives in a separate repository at https://github.com/gunnarvoet/sbemoored.
+
+Some of the time series have gaps. The time stamps seem OK. Re-downloading the data files from the affected instruments did not help. Seaterm shows a number of events recorded for the affected instruments, see example for **6435** below:
+
+![SBE56 Seaterm Screenshot](fig/sbe56_seaterm_screenshot.png)
+
+Clicking the events number brings up the following window:
+
+![SBE56 Event Listing Screenshot](fig/sbe56_event_listing_screenshot.png)
+
+Seems like there were power issues throughout the deployment that caused gaps in the time series.
 
 
 ### RBR
 Processing done.
 
-Some of the processing code lives in https://github.com/gunnarvoet/rbrmoored.
+Some of the processing code lives in a separate repository at https://github.com/gunnarvoet/rbrmoored.
+
 
 **Issues (solved):** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved. Wrong time offset for **72146**, also due to misbehaving computer. Unfortunately, these instruments were not in the included in the clock calibration (warm water dip).
 Time offsets for all three instruments (72146: 12s, 72167: 0s, 76611: 10s) were determined by comparison with a few instruments below.
