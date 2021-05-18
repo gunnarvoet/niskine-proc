@@ -1,31 +1,31 @@
 %This script processes Flowquest text data files created by
 %"Conversion Tool A"
 
+% AW - 18 May 2021: corrected instrument reading which had switched vx and
+% vy variables
 
-%set parameters below:
 
 
- Instdepth=0;  %set to zero if you want z to be relative to the transducer
- BinLength=16;
-%Declin=10.6 % %10.6 for SAMOA...positive east, negative west (CDMVTAE! or TVMDCAW!)
+Instdepth=0;  %set to zero if you want z to be relative to the transducer
+BinLength=16;
+
+% set declination -- ...positive east, negative west (CDMVTAE! or TVMDCAW!)
+% samoa = 10.6; 
+% niskine = 10.9; 
 Declin=-10.9; %for NISKINe 2019/2020
 
 %path='/volumes/Puao/data_archive/WaveChasers-DataArchive/SamoanPassage/Moorings/sp12/P1/Flowquest/rawdata/';
-
-path='/Users/johnmickett/Cruises_Research/NISKINe/fq_converted/';
+path='/Users/awaterhouse/Documents/GitHub/niskine-proc/fq/fq_converted/';
 
 %path='/Users/johnmickett/Cruises_Research/SPAM_EX/flowquest/flowquest_M6n/'
-
-
 %cd /Users/johnmickett/Cruises_Research/MC09/Flowquest/mendo09offload1/
 
-cd /Users/johnmickett/Cruises_Research/NISKINe/fq_converted/;
+%cd /Users/awaterhouse/Documents/GitHub/niskine-proc/fq/fq_converted/;
 
 %cd /Users/johnmickett/Cruises_Research/SPAM_EX/flowquest/flowquest_M6n/
 %cd /volumes/Puao/data_archive/WaveChasers-DataArchive/SamoanPassage/Moorings/sp12/P1/Flowquest/rawdata/;
 
-
-DdM=dir;
+DdM=dir([path '*.DAT.txt']);
 
 
 %getting DAT file names...
@@ -184,13 +184,11 @@ for jp=1:length(DdM);
 
     %fid=fopen(['C:\Cruises_Research\PhilEx\fqshort.txt']);
 
-
     %    h = waitbar(0,'Please wait...');
     %         for i=1:1000,
     %             % computation here %
     %             waitbar(i/1000,h);
     %         end
-
 
     %while fgets(fid)~=-1; %will read until end of file indicator (-1).
     while 1
@@ -201,16 +199,12 @@ for jp=1:length(DdM);
             break
         end
 
-
-
-
         if strcmp(LGETT(1:2),'$#')==1;
 
             if mod(k,20)==0;
                 fprintf('.');
                 %sprintf('%s','.');
             end
-
 
         elseif ~isempty(findstr(LGETT,'0x1EF'))==1;  %this will recognize the header line with the date
 
@@ -222,16 +216,11 @@ for jp=1:length(DdM);
             %OUTT=Aa{1};
 
             OUTT_HDR=strread(LGETT,'%s');
-
-
-
-
             HHMMSS=OUTT_HDR{5};
 
             %getting yearday
             Mostr={'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
             Icc=strmatch(OUTT_HDR{3},Mostr);
-
 
         elseif strcmp(LGETT(1:2),'E0')==1; %parse ensemble mean roll, pitch, heading info
 
@@ -251,12 +240,9 @@ for jp=1:length(DdM);
             end
             RPHa=[RPH(1:3:end-2)' RPH(2:3:end-1)' RPH(3:3:end)'];
 
-
         elseif strcmp(LGETT(1:2),'E2')==1; %parse radial velocity data
 
-
-
-            OUTT_E2=strread(LGETT,'%s');
+           OUTT_E2=strread(LGETT,'%s');
             NumBin=str2num(OUTT_E2{2})./4;
 
             %if NumBin=0 this means that there is no good data--so we need
@@ -272,14 +258,10 @@ for jp=1:length(DdM);
                 RV2=reshape(RV,NumBin,4);
 
             end
-
-
-
         elseif strcmp(LGETT(1:2),'E3')==1; %parse instrument coordinate data
 
             OUTT_E3=strread(LGETT,'%s');
             NumBin=str2num(OUTT_E3{2})./3;
-
 
             if NumBin~=0;
 
@@ -289,7 +271,6 @@ for jp=1:length(DdM);
                 end
 
                 IV=[IVel(1:3:end-2)' IVel(2:3:end-1)' IVel(3:3:end)'];
-
             end
 
 %% no earth coordinate data in NISKINE
@@ -314,8 +295,6 @@ for jp=1:length(DdM);
 % 
 %             end
 
-
-
         elseif strcmp(LGETT(1:2),'E5')==1; %percentage good
 
             OUTT_E5=strread(LGETT,'%s');
@@ -329,10 +308,7 @@ for jp=1:length(DdM);
                     Pgdd(jj-2)=str2num(OUTT_E5{jj});
                 end
 
-
             end
-
-
 
         elseif strcmp(LGETT(1:2),'E6')==1; %signal strength in dBm
 
@@ -353,7 +329,6 @@ for jp=1:length(DdM);
 
         elseif strcmp(LGETT(1:2),'E7')==1; %SNR in DB
 
-
             OUTT_E7=strread(LGETT,'%s');
             NumBin=str2num(OUTT_E7{2})./4;
 
@@ -367,16 +342,11 @@ for jp=1:length(DdM);
                 SNR=reshape(SNR,NumBin,4);
 
             end
-
-            
             
           elseif strcmp(LGETT(1:2),'E8')==1; %instrument pressure in bars * 4
 
-
              OUTT_E8=strread(LGETT,'%s');
                XDucerPres=str2num(OUTT_E8{2})./4./100;
-
-     
 
             %if we have radial velocity measured, we have an ensemble...
             if exist('RV') & exist('IV');
@@ -415,33 +385,25 @@ for jp=1:length(DdM);
                 FQ.RadVel.ch2(1:size(RV2,1),k)=RV2(:,3)./1000;
                 FQ.RadVel.ch3(1:size(RV2,1),k)=RV2(:,4)./1000;
 
-
-
-
-                FQ.InstVel.Vy(1:size(IV,1),k)=(IV(:,1)./1000); %Vx
-                FQ.InstVel.Vx(1:size(IV,1),k)=(IV(:,2)./1000); %Vx
+                FQ.InstVel.Vx(1:size(IV,1),k)=(IV(:,1)./1000); %Vx
+                FQ.InstVel.Vy(1:size(IV,1),k)=(IV(:,2)./1000); %Vx
                 FQ.InstVel.Vz(1:size(IV,1),k)=(IV(:,3)./1000); %Vx
 
-
-
-if exist('IV2','var');
-                FQ.Vely(1:size(IV2,1),k)=(IV2(:,1)./1000); %Vy
-                FQ.Velx(1:size(IV2,1),k)=(IV2(:,2)./1000); %Vx
-                FQ.Velz(1:size(IV2,1),k)=(IV2(:,3)./1000); %Vw
-% else
-%      FQ.Vely(1:size(IV,1),k)=NaN.*(IV(:,1)./1000); %Vy
-%                 FQ.Velx(1:size(IV,1),k)=NaN.*(IV(:,2)./1000); %Vx
-%                 FQ.Velz(1:size(IV,1),k)=NaN.*(IV(:,3)./1000); %Vw
-end
-
-    
-
+                if exist('IV2','var');
+                    FQ.Vely(1:size(IV2,1),k)=(IV2(:,1)./1000); %Vy
+                    FQ.Velx(1:size(IV2,1),k)=(IV2(:,2)./1000); %Vx
+                    FQ.Velz(1:size(IV2,1),k)=(IV2(:,3)./1000); %Vw
+                    % else
+                    %      FQ.Vely(1:size(IV,1),k)=NaN.*(IV(:,1)./1000); %Vy
+                    %                 FQ.Velx(1:size(IV,1),k)=NaN.*(IV(:,2)./1000); %Vx
+                    %                 FQ.Velz(1:size(IV,1),k)=NaN.*(IV(:,3)./1000); %Vw
+                end                
+                
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 %IMPT, make sure binlength is correct below (16 m, 8m, etc.)
                 NumBins(k)=NumBin;
 
-               
                 FQ.z=Instdepth+FQ.Engr.BlankDist(1)+BinLength./2+([0:1:(nanmax(NumBins)-1)].*BinLength);
 
                 %percent good
@@ -453,23 +415,16 @@ end
                 FQ.SigStr.ch2(1:size(SigStr,1),k)=SigStr(:,3);
                 FQ.SigStr.ch3(1:size(SigStr,1),k)=SigStr(:,4);
 
-
                 %signal to noise ratio
                 FQ.SNR.ch0(1:size(SNR,1),k)=SNR(:,1);
                 FQ.SNR.ch1(1:size(SNR,1),k)=SNR(:,2);
                 FQ.SNR.ch2(1:size(SNR,1),k)=SNR(:,3);
                 FQ.SNR.ch3(1:size(SNR,1),k)=SNR(:,4);
-
-
-
-
             end
 
             clear RV SNR SigStr Pgdd IV2 IV RV2 RPHa
 
-
         end
-
 
     end
 
@@ -481,9 +436,9 @@ Uu=FQ.Velx;
 Vv=FQ.Vely;
 
 [Tha,Rha]=cart2pol(Uu,Vv);
-FQdeg=rad2degT(Tha);
+FQdeg=rad2deg(Tha);
 FQdegCor=FQdeg+Declin;
-ThaCorr=degT2rad(FQdegCor);
+ThaCorr=deg2rad(FQdegCor);
 [Uua,Vva]=pol2cart(ThaCorr,Rha);
 
 FQ.Velx=Uua;
@@ -503,3 +458,4 @@ FQ.SigStr.info='Signal Strength in dBm';
 FQ.SNR.info='Signal to noise ratio in dB';
 FQ.declination=Declin;
 
+save([path 'FQ_output.mat'],'FQ');
