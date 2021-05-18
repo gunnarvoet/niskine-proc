@@ -16,6 +16,10 @@ Need to process cast nearby M1.
 
 ### Flowquest
 
+Processing done - need to double check that velocities look reasonable. 
+
+Run in matlab - Flowquest_text2mat_NISKINe.m to read in the fq_converted .DAT.txt files and generate the FQ structure which is saved in fq_converted/ called FQ_output.mat. Since the E4 header was missing in the binary and text files (header containing all earth coordinate data), the earth coordinate velocity needed to be calculated by hand using the instructions from LinkSys. Using the conversion in the file "Velocity relationship between instrument coordinate and earth coordinate1.pdf" and the matlab file - FQ_ConverInstrument2Earth in flowquest_mfiles/, a new output file with Earth coordinate velocity was added to FQ_output_Earth.mat. 
+
 
 ### SBE37
 Processing done.
