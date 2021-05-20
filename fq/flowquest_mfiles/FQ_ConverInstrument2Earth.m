@@ -6,6 +6,7 @@
 clear;
 printfig = 1; 
 fpath='/Users/awaterhouse/Documents/GitHub/niskine-proc/fq/fq_converted/';
+fpathWriteFig = '/Users/awaterhouse/Documents/GitHub/niskine-proc/fq/flowquest_mfiles/';
 
 load([fpath 'FQ_output.mat']);
 FQ.Earth.VE = NaN(size(FQ.InstVel.Vx));
@@ -84,6 +85,12 @@ xlim([datenum(2019,5,16) datenum(2020,10,13)])
 colormap(cbrewer('div','RdBu',24))
 caxis([-1 1]*.5); 
 
-export_fig([fpath 'FQVelocityEarth.png'],'-dpng','-r300')
+export_fig([fpathWriteFig 'FQVelocityEarth.png'],'-dpng','-r300')
+
+figure('paperposition',[0 0 7 3]) ; wysiwyg;
+plot(FQ.DateNum,FQ.xDucerPresDBar)
+axdate; axis ij;
+ylabel('pressure - dbar')
+export_fig([fpathWriteFig 'FQ_Pressure.png'],'-dpng','-r300')
 
 end
