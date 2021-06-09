@@ -14,6 +14,8 @@ Need to process cast nearby M1.
 ### ADCP
 Most ADCPs have been processed.
 
+Some of the processing code lives in a separate repository at https://github.com/gunnarvoet/gadcp. This interfaces heavily with the UH pycurrents module; follow the [instructions](https://currents.soest.hawaii.edu/ocn_data_analysis/installation.html) to install the software.
+
 The following is a list of ADCPs and for how long they recorded data.
      
 |  SN |Mooring|Performance|
