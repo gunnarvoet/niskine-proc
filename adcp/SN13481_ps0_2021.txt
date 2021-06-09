@@ -1,0 +1,30 @@
+ps0
+  Instrument S/N:  13481
+       Frequency:  76800 HZ
+   Configuration:  4 BEAM, JANUS
+     Match Layer:  10
+      Beam Angle:  20 DEGREES
+    Beam Pattern:  CONVEX 
+     Orientation:  UP  
+       Sensor(s):  HEADING  TILT 1  TILT 2  DEPTH  TEMPERATURE  PRESSURE
+Pressure Sens Coefficients:
+              c3 = -4.638757E-18
+              c2 = -2.758297E-04
+              c1 = +2.651165E+01
+          Offset = +1.777917E+03
+
+Temp Sens Offset:  0.06 degrees C
+
+    CPU Firmware:  50.41 [0]
+   Boot Code Ver:  Required:  1.17   Actual:  1.17
+    DEMOD #1 Ver:  ad48, Type:  1f
+    DEMOD #2 Ver:  ad48, Type:  1f
+    PWRTIMG  Ver:  85d3, Type:   6
+
+Board Serial Number Data:
+   23  00 00 05 89 1D 00  09 REC727-1004-06A
+   D3  00 00 05 89 49 BC  09 TUN727-1005-06A
+   B9  00 00 05 89 43 62  09 DSP727-2001-06G
+   59  00 00 05 89 18 C1  09 CPU727-2000-00M
+   94  00 00 05 88 FA 83  09 HPI727-3007-00A
+   2C  00 00 05 89 35 3F  09 HPA727-3009-0XB

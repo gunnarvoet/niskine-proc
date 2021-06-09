@@ -1,0 +1,59 @@
+Sent this email to RDI 24 May 2021:
+
+
+Hi,
+
+I have an issue with the pressure record of an ADCP time series that I recorded recently with a moored 75 kHz unit. As far as I can tell, the pressure time series is off by a factor of about 25. When I scale the pressure time series by this factor, it correlates well with a pressure record from an instrument higher up on the same mooring, which lets me conclude that the sensor itself seems to be working fine. I am wondering if the instrument has the wrong coefficients stored for the pressure sensor. I compared the output of ps0 with a record from the same instrument from 2015 and the coefficients of the pressure sensor differ quite a bit, see the output below. Do you have any suggestions for how to proceed?
+
+Thanks!
+Gunnar
+
+
+--
+Gunnar Voet (he/him/his)
+Scripps Institution of Oceanography
+web: gunnarvoet.github.io
+phone: 858-822-6809
+email: gvoet@ucsd.edu
+
+
+--------
+
+ps0 output (2015 deployment):
+
+  Instrument S/N:  13481
+       Frequency:  76800 HZ
+   Configuration:  4 BEAM, JANUS
+     Match Layer:  10
+      Beam Angle:  20 DEGREES
+    Beam Pattern:  CONVEX
+     Orientation:  UP
+       Sensor(s):  HEADING  TILT 1  TILT 2  DEPTH  TEMPERATURE  PRESSURE
+Pressure Sens Coefficients:
+              c3 = +3.163320E-10
+              c2 = -5.003847E-06
+              c1 = +1.285292E+00
+          Offset = +1.954940E+02
+
+Temp Sens Offset:  0.06 degrees C
+
+--------
+
+ps0 output (2020 deployment):
+
+  Instrument S/N:  13481
+       Frequency:  76800 HZ
+   Configuration:  4 BEAM, JANUS
+     Match Layer:  10
+      Beam Angle:  20 DEGREES
+    Beam Pattern:  CONVEX
+     Orientation:  UP
+       Sensor(s):  HEADING  TILT 1  TILT 2  DEPTH  TEMPERATURE  PRESSURE
+Pressure Sens Coefficients:
+              c3 = -4.638757E-18
+              c2 = -2.758297E-04
+              c1 = +2.651165E+01
+          Offset = +1.777917E+03
+
+Temp Sens Offset:  0.06 degrees C
+
