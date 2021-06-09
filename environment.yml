@@ -30,3 +30,4 @@ dependencies:
     - "-e git+https://github.com/gunnarvoet/gvpy#egg=gvpy"
     - "-e git+https://github.com/gunnarvoet/rbrmoored#egg=rbrmoored"
     - "-e git+https://github.com/gunnarvoet/sbemoored#egg=sbemoored"
+    - "-e git+https://github.com/gunnarvoet/gadcp#egg=gadcp"
