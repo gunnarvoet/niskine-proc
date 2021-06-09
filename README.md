@@ -22,7 +22,7 @@ The following is a list of ADCPs and for how long they recorded data.
 |-----|-------|-----------|
 | 3109|M1     |Full record|
 | 9408|M1     |Full record|
-|13481|M1     |Full record; issues with pressure & rotation|
+|13481|M1     |Full record; issues with pressure time series|
 |14408|M1     |Few days only|
 |22476|M1     |Few days only|
 | 3110|M2     |Full record|
@@ -39,7 +39,7 @@ The following is a list of ADCPs and for how long they recorded data.
 
 Still need to work out a couple issues.
 
-**SN13481** has a full record, however, the pressure time series is not realistic. It does show variations as the nearby pressure time series from other ADCPs but I need to scale it by a factor of about 25 to get to realistic pressure values. In addition, the processed u and v velocities seem to not line up with the observations from the neighboring instrument above. We are still in communication with RDI trying to figure out what is going on here.
+**SN13481** has a full record, however, the pressure time series is not realistic. It does show variations as the nearby pressure time series from other ADCPs but I need to scale it by a factor of about 25 to get to realistic pressure values. We are still in communication with RDI trying to figure out what is going on here.
 
 **SN8065** and **SN8122** did not have pressure sensors. The processing code still needs to be extended to allow for depth gridding. Since both instruments returned only a few days of data, this has not been higher up on the priority list.
 
