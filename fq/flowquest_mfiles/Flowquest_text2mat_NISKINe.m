@@ -430,19 +430,21 @@ for jp=1:length(DdM);
 
 end
 
+% Earth coordinates not calculated yet -- see FQ_ConvertInstrument2Earth.m
+% for conversion (and declination estimate)
 
-%rotating u an v velocities to convert from mag. to true directions.
-Uu=FQ.Velx;
-Vv=FQ.Vely;
-
-[Tha,Rha]=cart2pol(Uu,Vv);
-FQdeg=rad2deg(Tha);
-FQdegCor=FQdeg+Declin;
-ThaCorr=deg2rad(FQdegCor);
-[Uua,Vva]=pol2cart(ThaCorr,Rha);
-
-FQ.Velx=Uua;
-FQ.Vely=Vva;
+% %rotating u an v velocities to convert from mag. to true directions.
+% Uu=FQ.Velx;
+% Vv=FQ.Vely;
+% 
+% [Tha,Rha]=cart2pol(Uu,Vv);
+% FQdeg=rad2deg(Tha);
+% FQdegCor=FQdeg+Declin;
+% ThaCorr=deg2rad(FQdegCor);
+% [Uua,Vva]=pol2cart(ThaCorr,Rha);
+% 
+% FQ.Velx=Uua;
+% FQ.Vely=Vva;
 
 
 FQ.Engr_readme{1}='BlankDist is blanking distance in meters';

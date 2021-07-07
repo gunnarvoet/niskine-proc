@@ -1,0 +1,525 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2580
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red22\green26\blue30;\red255\green255\blue255;\red22\green82\blue202;
+\red0\green0\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c11373\c13333\c15686;\cssrgb\c100000\c100000\c100000;\cssrgb\c9804\c41569\c83137;
+\cssrgb\c0\c0\c100000;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Date: Fri, 11 Jun 2021 18:20:36 -0700\cb1 \
+\cb3 To: Amy Waterhouse <awaterhouse@ucsd.edu>\cb1 \
+\cb3 From: LinkQuest Support <support@link-quest.com>\cb1 \
+\cb3 Subject: Fwd: Re: flowquest missing E4\cb1 \
+\
+\
+\cb3 Date: Fri, 28 May 2021 17:40:07 -0700\cb1 \
+\cb3 To: Amy Waterhouse <awaterhouse@ucsd.edu>\cb1 \
+\cb3 From: LinkQuest Support <support@link-quest.com>\cb1 \
+\cb3 Subject: Re: flowquest missing E4\cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs26 \cf2 \cb3 Hi Amy,\cb1 \
+\
+\cb3 Since the instrument coordinate velocities in the data output from the FlowQuest system are already the leveled velocities in the instrument coordinate, which were compensated by the roll and pitch, the relationship between the instrument coordinate velocities and the earth coordinate velocities is updated as attached. We also attached a sample data file and a sample conversion result. Since the system did the fixed point calculation, it may have one unit difference from your calculation result.\cb1 \
+\
+\cb3 Best Regards,\cb1 \
+\
+\cb3 Ning\cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 At 07:41 AM 5/24/2021 -0700, you wrote:\cb1 \
+\cb3 Hi Ning,\'c2\cb1 \
+\
+\cb3 I do not have access to the instrument at the moment -- so will not be able to run the system to do single pings.\'c2\cb1 \
+\
+\cb3 I understand that the system uses the (unsaved) single ping r/p/h to calculate\'c2 single ping velocities and ensemble average but there seems to be something incorrect with the conversion as it is now. However, the averaged r/p/h does not give the correct conversions when compared with an RDI ADCP which had overlapping deployment depths -- it seems like it is either 180 or 90 out of phase which leads me to think that there is possibly a bracket missing in the formula that was sent. Can the\'c2 conversion using the sample data that I sent in the pdf be\'c2 confirmed on your end to help us get the rest of our deployment\'c2 record?\cb1 \
+\
+\cb3 Amy\cb1 \
+\
+\
+\
+\cb3 On Fri, May 21, 2021 at 6:11 PM LinkQuest Support <{\field{\*\fldinst{HYPERLINK "mailto:support@link-quest.com"}}{\fldrslt \cf4 \ul \ulc4 \strokec4 support@link-quest.com}}> wrote:\
+Hi Amy,\cb1 \
+\
+\cb3 The conversion formula should be correct.\'c2\'a0 However,\'c2\'a0 It is only an approximate way to convert the instrument coordinate velocities for the ensemble to the earth coordinate velocities using the average R/P/H for the whole ensemble. The actual earth coordinate velocities are generated using the R/P/H for each ping during the deployment.\cb1 \
+\
+\cb3 I assume you have the unit with you at present time. I suggest you to further verify the conversion formula by configuring the system to have only one ping for the\'c2\'a0 ensemble.\cb1 \
+\
+\cb3 Best Regards,\cb1 \
+\
+\cb3 Ning\cb1 \
+\
+\cb3 At 09:07 AM 5/21/2021 -0700, you wrote:\
+Hi Ning,\'c3\'82\cb1 \
+\
+\cb3 Following up on the conversion to Earth coordinates -- I'm not getting the right conversion and was wondering if perhaps there are\'c3\'82 missing brackets somewhere in the pdf you sent? I used a previous deployment to check that the output from converting the first bin of data from E3 matched with the output in the dat file of E4. I have attached the results of my conversion & a subset of the output from the deployment file. I've triple checked my code but would appreciate\'c3\'82 some assistance here.\'c3\'82\cb1 \
+\
+\cb3 Thank you\cb1 \
+\
+\cb3 Amy\'c3\'82\cb1 \
+\
+\cb3 On Thu, May 20, 2021 at 6:44 PM Amy Waterhouse <{\field{\*\fldinst{HYPERLINK "mailto:awaterhouse@ucsd.edu"}}{\fldrslt \cf4 \ul \ulc4 \strokec4 awaterhouse@ucsd.edu}}> wrote:\cb1 \
+\cb3 Yes, it is 10185.\cb1 \
+\
+\cb3 Amy\cb1 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cb3 On Thu, 20 May 2021, 17:50 LinkQuest Support, <{\field{\*\fldinst{HYPERLINK "mailto:support@link-quest.com"}}{\fldrslt \cf4 \ul \ulc4 \strokec4 support@link-quest.com}}> wrote:\cb1 \
+\cb3 Hi Amy,\cb1 \
+\cb3 Could you please email me the serial number of the unit? The serial number is a 6 digit number which appears on a white label affixed to the red pressure housing.\cb1 \
+\cb3 Thanks and Best Regards,\cb1 \
+\
+\cb3 Ning\cb1 \
+\
+\cb3 At 10:25 AM 5/19/2021 -0700, you wrote:\
+Thank you, Ning.\'c3\'83\'e2\'80\'9a\cb1 \
+\
+\cb3 I have another question - our pressure sensor data from the FQ looks a bit strange and not what was expected. The FlowQuest was moored at ~600m depth for about a year and the pressure record looks very smooth and unlike the pressure sensor from slightly higher up in the water column (from an instrument at 300m depth). While I don't expect them to be exactly the same, this mooring was in 4000m of water, so they should track a bit better than they do. The mooring was subject to quite a bit of knockdown during the year so we expected it to change a bit more than this but not as much as it shows between Jan - April 2020 (see below).\'c3\'83\'e2\'80\'9a\cb1 \
+\
+\cb3 Do you mind having a look at the raw data to see that we have everything correct with our data conversion from the binary files? If everything looks fine to you then it might mean that our pressure sensor was broken. However, since the recorded pressure was close to 600m, it seems like it was at least working partially.\'c3\'83\'e2\'80\'9a\cb1 \
+\
+\cb3 Here is a plot of the full FQ pressure from our deployment:\'c3\'83\'e2\'80\'9a\cb1 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cb3 You can see that something strange happens between Jan - Apr 2020. Otherwise the record is very smooth (almost too smooth).\'c3\'83\'e2\'80\'9a\cb1 \
+\
+\cb3 This is the pressure in black (plus east-velocity in colours) from an RDI ADCP moored at 300m over part of the same time period on the same mooring line:\'c3\'83\'e2\'80\'9a\cb1 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cb3 Here are copies of the DAT files from our deployment:\'c3\'83\'e2\'80\'9a\'a0{\field{\*\fldinst{HYPERLINK "https://urldefense.com/v3/__https://drive.google.com/drive/folders/1HAZjvWVh0Obt8wD_qWWCxwnCXmrtLfxC?usp=sharing__;!!Mih3wA!X23GhgYV1IAW5VHjKU0O4ijICVqpNgQnQGkl9NOn7sKUSpEWrgwXu7raoK1dczeDsQ$"}}{\fldrslt \cf4 \ul \ulc4 \strokec4 https://drive.google.com/drive/folders/1HAZjvWVh0Obt8wD_qWWCxwnCXmrtLfxC?usp=sharing}}\cb1 \
+\
+\cb3 Thanks Ning and happy to talk by phone too if that is easier -\cb1 \
+\
+\cb3 Amy\cb1 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cb3 On Tue, May 18, 2021 at 6:43 PM LinkQuest Support <{\field{\*\fldinst{HYPERLINK "mailto:support@link-quest.com"}}{\fldrslt \cf4 \ul \ulc4 \strokec4 support@link-quest.com}}> wrote:\cb1 \
+\cb3 Hi Amy,\cb1 \
+\
+\cb3 You may use the average r, p, h in E0 to calculate the earth coordinate velocities from the instrumental coordinate velocities in this case. However, it is highly recommended to configure the system to output/save the earth coordinate velocities in future deployments.\cb1 \
+\
+\cb3 Best Regards,\cb1 \
+\
+\cb3 Ning\cb1 \
+\
+\cb3 At 10:07 AM 5/18/2021 -0700, Amy Waterhouse wrote:\cb1 \
+\cb3 Hi Ning,\'c3\'83\'c6\'92\'c3\'a2\'e2\'82\'ac\'c5\'a1\cb1 \
+\
+\cb3 One more question -- do I use the average roll, pitch and heading are all variables from the E0 output as the r, p, h in the formula of the attached?\'c3\'83\'c6\'92\'c3\'a2\'e2\'82\'ac\'c5\'a1\cb1 \
+\
+\cb3 There are also the outputs from E1 for each ping.\'c3\'83\'c6\'92\'c3\'a2\'e2\'82\'ac\'c5\'a1\cb1 \
+\
+\cb3 Amy\cb1 \
+\
+\cb3 On Tue, May 18, 2021 at 9:20 AM Amy Waterhouse <{\field{\*\fldinst{HYPERLINK "mailto:awaterhouse@ucsd.edu"}}{\fldrslt \cf4 \ul \ulc4 \strokec4 awaterhouse@ucsd.edu}}> wrote:\cb1 \
+\
+\
+\
+\cb3 Thank you very much, Ning!\'c3\'83\'c6\'92\'c3\'a2\'e2\'82\'ac\'c5\'a1\cb1 \
+\
+\cb3 Amy\cb1 \
+\
+\cb3 On Fri, May 14, 2021 at 5:52 PM LinkQuest Support <{\field{\*\fldinst{HYPERLINK "mailto:support@link-quest.com"}}{\fldrslt \cf4 \ul \ulc4 \strokec4 support@link-quest.com}}> wrote:\cb1 \
+\cb3 Hi Amy,\cb1 \
+\
+\cb3 Please follow the attached document to calculate the earth coordinate velocities.\cb1 \
+\
+\cb3 Best Regards,\cb1 \
+\
+\cb3 Ning\cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf2 \cb3 _________________________\cb1 \
+\cb3 Ning Xiao, Ph.D.\cb1 \
+\cb3 LinkQuest Inc.\cb1 \
+\cb3 6749 Top Gun Street, Suite 100\cb1 \
+\cb3 San Diego, CA 92121\cb1 \
+\cb3 Tel: (858) 623-9900, 623-9916 ext. 112\cb1 \
+\cb3 Fax: (858) 623-9918\cb1 \
+\cb3 Email:\'a0{\field{\*\fldinst{HYPERLINK "mailto:sales@link-quest.com"}}{\fldrslt \cf4 \ul \ulc4 \strokec4 sales@link-quest.com}}\cf5 \cb1 \strokec5 \
+\pard\pardeftab720\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "http://www.link-quest.com/"}}{\fldrslt \cf4 \cb3 \ul \ulc4 \strokec4 www.link-quest.com}}\
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs18 \cf2 \cb3 \strokec2 This e-mail and any attachment are confidential and may be privileged or otherwise protected from disclosure.\cb1 \
+\cb3 It is solely intended for the person(s) named above. If you are not the intended recipient, any reading, use,\cb1 \
+\cb3 disclosure, copying or distribution of all or parts of this e-mail or associated attachments is strictly prohibited.\cb1 \
+\cb3 If you are not an intended recipient, please notify the sender immediately by replying to this message or by\cb1 \
+\cb3 telephone and delete this e-mail and any attachments permanently from your system.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\fs24 \cf2 \cb3 At 09:31 AM 5/14/2021 -0700, Amy Waterhouse wrote:\cb1 \
+\cb3 Hi there,\'c3\'83\'c6\'92\'c3\'86\'e2\'80\'99\'c3\'83\'c2\'a2\'c3\'a2\'e2\'80\'9a\'c2\'ac\'c3\'85\'c2\'a1\cb1 \
+\
+\cb3 I am trying to extract velocity from a recent deployment of our flowquest and it looks like we are missing the earth coordinate velocity (no E4 output\'c3\'83\'c6\'92\'c3\'86\'e2\'80\'99\'c3\'83\'c2\'a2\'c3\'a2\'e2\'80\'9a\'c2\'ac\'c3\'85\'c2\'a1 in the binary DAT file). Can you tell me the appropriate conversion from our instrument velocities (E3) to get earth coordinate velocity?\'c3\'83\'c6\'92\'c3\'86\'e2\'80\'99\'c3\'83\'c2\'a2\'c3\'a2\'e2\'80\'9a\'c2\'ac\'c3\'85\'c2\'a1\cb1 \
+\
+\cb3 Thanks,\cb1 \
+\
+\cb3 Amy\cb1 \
+\
+\cb3 --\cb1 \
+\cb3 Amy Waterhouse\cb1 \
+\cb3 Scripps Institution of Oceanography\cb1 \
+\
+\
+\
+\
+\cb3 --\cb1 \
+\cb3 Amy Waterhouse\cb1 \
+\cb3 Scripps Institution of Oceanography\cb1 \
+\
+\
+\
+\cb3 --\cb1 \
+\cb3 Amy Waterhouse\cb1 \
+\cb3 Scripps Institution of Oceanography\cb1 \
+\
+\
+\cb3 --\cb1 \
+\cb3 Amy Waterhouse\cb1 \
+\cb3 Scripps Institution of Oceanography\cb1 \
+\
+\cb3 Content-Type: image/png; name="FQPressure.png"\cb1 \
+\cb3 Content-Disposition: inline; filename="FQPressure.png"\cb1 \
+\cb3 Content-ID: <ii_kovq90oo0>\cb1 \
+\cb3 X-Attachment-Id: ii_kovq90oo0\cb1 \
+\
+\cb3 Content-Type: image/png; name="SN10219_first_half_u.png"\cb1 \
+\cb3 Content-Disposition: inline; filename="SN10219_first_half_u.png"\cb1 \
+\cb3 Content-ID: <ii_kovq9of91>\cb1 \
+\cb3 X-Attachment-Id: ii_kovq9of91\cb1 \
+\
+\cb3 Content-Type: application/pdf; name="ConversionIssuesInstToEarth.pdf"\cb1 \
+\cb3 Content-Disposition: attachment; filename="ConversionIssuesInstToEarth.pdf"\cb1 \
+\cb3 Content-ID: <f_koyinotd0>\cb1 \
+\cb3 X-Attachment-Id: f_koyinotd0\cb1 \
+\
+\
+\cb3 --\cb1 \
+\cb3 Amy Waterhouse\cb1 \
+\cb3 Scripps Institution of Oceanography
+\fs26 \cb1 \
+}

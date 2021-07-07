@@ -52,7 +52,6 @@ shading flat;
 hold on; axis ij; 
 pcolor(adcpsf.dnum,adcpsf.z,sqrt(adcpsf.u.^2 + adcpsf.v.^2));
 pcolor(FQadcp.dnum, FQadcp.z, sqrt(FQadcp.u.^2 + FQadcp.v.^2 + FQadcp.w.^2)); shading flat; axis ij;
-caxis([-1 1]*1e-1);
 shading flat; 
 axdate; axis ij;
 xlim([datenum(2019,5,16) datenum(2020,10,13)])
@@ -61,6 +60,38 @@ caxis([0 1]*.5);
 hcbar('Velocity Amplitude (m/s)',[0.75 0.25 0.1 0.025])
 ylim([0 1400]); 
 bdr_savefig2(gcf,figpath,'M2_CurrentsFull','p','300','fontsize',10);
+
+% Plot the M2 full current meter record - u
+figure('paperposition',[0 0 10 6]); wysiwyg;
+pcolor(adcp.dnum,adcp.z,adcp.u);
+shading flat; 
+hold on; axis ij; 
+pcolor(adcpsf.dnum,adcpsf.z,adcpsf.u);
+pcolor(FQadcp.dnum, FQadcp.z, FQadcp.u); shading flat; axis ij;
+shading flat; 
+axdate; axis ij;
+xlim([datenum(2019,5,16) datenum(2020,10,13)])
+colormap(cbrewer('div','RdBu',24))
+caxis([-1 1]*.5);
+hcbar('Velocity (m/s)',[0.75 0.25 0.1 0.025])
+ylim([0 1400]); 
+bdr_savefig2(gcf,figpath,'M2_CurrentsFull_u','p','300','fontsize',10);
+
+% Plot the M2 full current meter record - v
+figure('paperposition',[0 0 10 6]); wysiwyg;
+pcolor(adcp.dnum,adcp.z,adcp.v);
+shading flat; 
+hold on; axis ij; 
+pcolor(adcpsf.dnum,adcpsf.z,adcpsf.v);
+pcolor(FQadcp.dnum, FQadcp.z, FQadcp.v); shading flat; axis ij;
+shading flat; 
+axdate; axis ij;
+xlim([datenum(2019,5,16) datenum(2020,10,13)])
+colormap(cbrewer('div','RdBu',24))
+caxis([-1 1]*.5);
+hcbar('Velocity (m/s)',[0.75 0.25 0.1 0.025])
+ylim([0 1400]); 
+bdr_savefig2(gcf,figpath,'M2_CurrentsFull_v','p','300','fontsize',10);
 
 % Save new pressure interpolated FQ data
 save([fpath 'FQ_InterpolatedFinal.mat'],'FQadcp');
