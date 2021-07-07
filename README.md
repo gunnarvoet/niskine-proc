@@ -59,13 +59,14 @@ Since the E4 header was missing in the binary and text files from the niskine de
 3) FQ_interpolateNewPressure.m -- there is NO PRESSURE sensor in the FQ (confirmed by LinkSys for this S/N). Therefore, the long range ADCP which was moored above the FQ is used to interpolate a realistic pressure. A new (and final) output file is generated from this m-file called: fq_converted/FQ_interpolatedFinal.mat
 
 Final output files: 
-fq/fq_converted/FQ_output --> beam and leveled instrument velocities
-fq/fq_converted/FQ_output_EarthCoords --> conversion to Earth coordinates (with declination correction) as FQ.Earth.VN, .VE and .VW. Note that the E and N vectors are switched because of the opposite orientation of the beams compared to RDI. Output is correct. 
-fq/fq_converted/FQ_InterpolatedFinal.mat --> final output file to be used 
+* fq/fq_converted/FQ_output --> beam and leveled instrument velocities
+* fq/fq_converted/FQ_output_EarthCoords --> conversion to Earth coordinates (with declination correction) as FQ.Earth.VN, .VE and .VW. Note that the E and N vectors are switched because of the opposite orientation of the beams compared to RDI. Output is correct. 
+* fq/fq_converted/FQ_InterpolatedFinal.mat --> final output file to be used 
 
-Final figure: 
-fig/M2_CurrentsFull_u.png made by fq/flowquest_mfiles/FQ_interpolateNewPressure.m
-fig/M2_CurrentsFull_v.png made by fq/flowquest_mfiles/FQ_interpolateNewPressure.m
+Final figures: 
+* fig/M2_CurrentsFull_u.png made by fq/flowquest_mfiles/FQ_interpolateNewPressure.m
+* fig/M2_CurrentsFull_v.png made by fq/flowquest_mfiles/FQ_interpolateNewPressure.m
+
 
 ### SBE37
 Processing done.
