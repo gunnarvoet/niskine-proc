@@ -46,24 +46,27 @@ Still need to work out a couple issues.
 **Magnetic declination** at the mooring sites is about -10.9.
 
 ### Flowquest
+Processing done. 
 
-Processing -> need to fix the conversion from Instrument velocities to Earth coordinates. AW is waiting for LinkQuest to write back with the correct conversion. 
+Main issues were to fix the conversion from Instrument velocities to Earth coordinates. See documents in the fq/DocsFromLinkSys on how the "leveled" (E3, in dat files) velocities are converted to Earth coordinates (E4, typically output in dat files). 
 
-Processing is to be run using matlab - Flowquest_text2mat_NISKINe.m to read in the fq_converted .DAT.txt files and generate the FQ structure which is saved in fq_converted/ called FQ_output.mat. 
+Processing is to be run using matlab - 
+1) Flowquest_text2mat_NISKINe.m to read in the fq_converted .DAT.txt files and generate the FQ structure which is saved in fq_converted/ called FQ_output.mat. 
 
-Since the E4 header was missing in the binary and text files (header containing all earth coordinate data), the earth coordinate velocity needed to be calculated by hand using the instructions from LinkSys. Using the conversion in the file "Velocity relationship between instrument coordinate and earth coordinate1.pdf" and the matlab file - FQ_ConverInstrument2Earth in flowquest_mfiles/, a new output file with Earth coordinate velocity was added to FQ_output_Earth.mat. 
+2) FQ_ConvertInstrument2Earth.m -- 
+Since the E4 header was missing in the binary and text files from the niskine deployment (header containing all earth coordinate data), the earth coordinate velocity needs to be calculated by hand using the instructions from LinkSys. Using the conversion in the file "Velocity relationship between leveled instrument coordinate and earth coordinate.doc" found in fq/DocsFromLinkSys/, a new output file with Earth coordinate velocity was added in fq_converted/FQ_output_Earth.mat. 
 
-As a second check on the conversion to Earth coordinates, fq/flowquest_mfiles/FQ_ConverInstrument2Earth_TestPhilExData.m is used to compare with the PhilEx deployment that recorded in both instrument and Earth coordinates. 
-
-The pressure record from the FQ was not looking realistic. Waiting for LinkQuest to determine the issue. Fro now, the long range ADCP isabove. the FQ is used to interpolate a realistic pressure (fq/flowquest_mfiles/FQ_interpolateNewPressure.m). 
+3) FQ_interpolateNewPressure.m -- there is NO PRESSURE sensor in the FQ (confirmed by LinkSys for this S/N). Therefore, the long range ADCP which was moored above the FQ is used to interpolate a realistic pressure. A new (and final) output file is generated from this m-file called: fq_converted/FQ_interpolatedFinal.mat
 
 Final output files: 
-fq/fq_converted/FQ_output --> beam and instrument coordinates
-fq/fq_converted/FQ_output_EarthCoords --> conversion to Earth coordinates as FQ.Earth.VN, .VE and .VW. Waiting for LinkQuest to update routines (not working yet)
-fq/fq_converted/FQ_InterpolatedFinal.mat --> final output file to be used (!! FQ.Earth outputs are currently not correct)
+* fq/fq_converted/FQ_output --> beam and leveled instrument velocities
+* fq/fq_converted/FQ_output_EarthCoords --> conversion to Earth coordinates (with declination correction) as FQ.Earth.VN, .VE and .VW. Note that the E and N vectors are switched because of the opposite orientation of the beams compared to RDI. Output is correct. 
+* fq/fq_converted/FQ_InterpolatedFinal.mat --> final output file to be used 
 
-Final figure: 
-fig/M2_CurrentsFull.png made by fq/flowquest_mfiles/FQ_interpolateNewPressure.m
+Final figures: 
+* fig/M2_CurrentsFull_u.png made by fq/flowquest_mfiles/FQ_interpolateNewPressure.m
+* fig/M2_CurrentsFull_v.png made by fq/flowquest_mfiles/FQ_interpolateNewPressure.m
+
 
 ### SBE37
 Processing done.
