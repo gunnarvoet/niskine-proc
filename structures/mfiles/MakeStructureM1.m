@@ -207,6 +207,7 @@ for moor = 1:3
     hcbar('Uz_{ni}, Vz_{ni} m/s',[0.7 0.6 0.2 0.015])
     eval(['bdr_savefig2(gcf,''figs/'',''M' num2str(moor) '_NIshear'',''p'',300,''fontsize'',10);']);
     
+    eval(['save M' num2str(moor) '.mat M' num2str(moor)]);
     
 end
 
