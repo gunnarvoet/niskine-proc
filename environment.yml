@@ -7,27 +7,24 @@ channels:
   - conda-forge
 dependencies:
   - python=3.8
-  - ipympl
-  - ipdb
-  - black
-  - ipykernel
-  - ipython
-  - jupyter
-  - jupyter_nbextensions_configurator
-  - jupyter_contrib_nbextensions
   - matplotlib
   - numpy
   - pandas
-  - pytest
   - scipy
   - xarray
-  - pip
+  - dask
   - netcdf4
+  - requests
+  - statsmodels
+  - cartopy
+  - pip
   - pip:
-    - jupytext
     - pyrsktools
-    - watchmagic
     - "-e git+https://github.com/gunnarvoet/gvpy#egg=gvpy"
     - "-e git+https://github.com/gunnarvoet/rbrmoored#egg=rbrmoored"
     - "-e git+https://github.com/gunnarvoet/sbemoored#egg=sbemoored"
     - "-e git+https://github.com/gunnarvoet/gadcp#egg=gadcp"
+    # - "-e /Users/gunnar/Projects/python/gvpy"
+    # - "-e /Users/gunnar/Projects/python/gadcp"
+    # - "-e /Users/gunnar/Projects/python/rbrmoored"
+    # - "-e /Users/gunnar/Projects/python/sbemoored"
