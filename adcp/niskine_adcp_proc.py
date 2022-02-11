@@ -6,17 +6,17 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.2
+#       jupytext_version: 1.13.6
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
 #     name: python3
 # ---
 
-# %% [markdown] heading_collapsed=true
+# %% [markdown]
 # #### Imports
 
-# %% hidden=true
+# %%
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -43,41 +43,41 @@ plt.ion()
 # %% [markdown]
 # # NISKINe ADCP data processing
 
-# %% [markdown] heading_collapsed=true
+# %% [markdown]
 # ## Set parameters
 
-# %% [markdown] hidden=true
+# %% [markdown]
 # Set the path to your local mooring data directory; this is the directory level that contains folders `M1`, `M2`, and `M3`, for individual moorings.
 
-# %% hidden=true
-NISKINe_data = Path('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/')
+# %%
+NISKINe_data = Path('/Users/gunnar/Projects/niskine/data/NISKINe/Moorings/NISKINE19/')
 
-# %% hidden=true
+# %%
 project = "NISKINe"
 
-# %% [markdown] hidden=true
+# %% [markdown]
 # Save the parameters to `parameters.yml` so we can read them with other functions and do not need to pass them as parameters every time.
 
-# %% hidden=true
+# %%
 nap.save_params(path=NISKINe_data, project=project)
 
-# %% [markdown] heading_collapsed=true
+# %% [markdown]
 # ## Read time offsets
 
-# %% [markdown] hidden=true
+# %% [markdown]
 # There are two files with time drift information, I must have done this at sea and then on shore again. The second file does not have the instrument type info which makes it easier to read as it is the same format as the time drift file that is used for the SBE37.
 
-# %% hidden=true
+# %%
 time_offsets = nap.read_time_offsets()
 
-# %% hidden=true
+# %%
 time_offsets
 
 
-# %% [markdown] heading_collapsed=true
+# %% [markdown]
 # ## Processing function & default parameters
 
-# %% hidden=true
+# %%
 def convert_time_stamp(time_np64):
     # need time stamps in the following format:
     # end_pc   = (2020, 10,  9, 20, 26,  0)
@@ -85,7 +85,7 @@ def convert_time_stamp(time_np64):
     return (dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
 
 
-# %% hidden=true
+# %%
 def load_default_parameters():
     editparams = dict(
         max_e=0.2,  # absolute max e
@@ -99,9 +99,9 @@ def load_default_parameters():
     return editparams, tgridparams
 
 
-# %% hidden=true
+# %%
 def plot_raw_adcp(mooring, sn):
-    dir_data_raw, raw_files, dir_data_out, dir_fig_out = construct_adcp_paths(
+    dir_data_raw, raw_files, dir_data_out, dir_fig_out = nap.construct_adcp_paths(
         sn, mooring
     )
     raw_files_posix = gadcp.io.read_raw_rdi([file.as_posix() for file in raw_files])
@@ -110,7 +110,7 @@ def plot_raw_adcp(mooring, sn):
     gv.plot.png(name_plot_raw)
 
 
-# %% hidden=true
+# %%
 def process_adcp(mooring, sn, dgridparams, ibad=None, n_ensembles=None, pressure_scale_factor=1):
     dir_data_raw, raw_files, dir_data_out, dir_fig_out = construct_adcp_paths(
         sn, mooring
@@ -145,7 +145,7 @@ def process_adcp(mooring, sn, dgridparams, ibad=None, n_ensembles=None, pressure
     data.to_netcdf(name_data_proc)
 
 
-# %% hidden=true
+# %%
 def load_proc_adcp(mooring, sn):
     dir_data_raw, raw_files, dir_data_out, dir_fig_out = construct_adcp_paths(
         sn, mooring
@@ -155,7 +155,7 @@ def load_proc_adcp(mooring, sn):
     return data
 
 
-# %% hidden=true
+# %%
 def plot_adcp(mooring, sn):
     data = load_proc_adcp(mooring, sn)
     fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(7.5, 5),
@@ -170,10 +170,10 @@ def plot_adcp(mooring, sn):
     return data
 
 
-# %% [markdown] heading_collapsed=true
+# %% [markdown]
 # ## M1
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN9408
 
 # %% hidden=true
@@ -198,7 +198,19 @@ nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 # %% hidden=true
 data = nap.plot_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% hidden=true
+test = xr.open_dataset('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/ADCP/proc/SN9408/M1_9408_old.nc')
+
+# %% hidden=true
+test.w.plot(robust=True)
+
+# %% hidden=true
+data.w.plot(robust=True)
+
+# %% hidden=true
+(test.w-data.w).plot(robust=True)
+
+# %% [markdown] heading_collapsed=true
 # ### SN13481
 
 # %% hidden=true
@@ -305,7 +317,7 @@ nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None, pressure
 # %% hidden=true
 nap.plot_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN14408
 
 # %% hidden=true
@@ -328,7 +340,7 @@ nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 # %% hidden=true
 data = nap.plot_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN22476
 
 # %% hidden=true
@@ -349,7 +361,7 @@ nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 # %% hidden=true
 data = nap.plot_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN3109
 
 # %% hidden=true
@@ -357,15 +369,62 @@ sn = 3109
 mooring = 'M1'
 
 # %% hidden=true
+test = xr.open_dataset('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/ADCP/proc/SN3109/M1_3109_old.nc')
+
+# %% hidden=true
+new = xr.open_dataset('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/ADCP/proc/SN3109/M1_3109.nc')
+
+# %% hidden=true
+test.w.sel(time='2020-03-12').plot(robust=True)
+
+# %% hidden=true
+new.w.sel(time='2020-03-12').plot(robust=True)
+
+# %% hidden=true
 if 0:
     plot_raw_adcp(mooring, sn)
+
+# %% [markdown] hidden=true
+# Data from this ADCP show reflections where the top buoy was in the way. We need to mask bin(s) here.
+
+# %% [markdown] hidden=true
+# Read raw data to find out where to mask. Looks like bin 16. Also leaving out the first two bins.
+
+# %% hidden=true
+dir_data_raw, raw_files, dir_data_out, dir_fig_out = nap.construct_adcp_paths(
+    sn, mooring
+)
+raw_file = raw_files[0]
+
+# %% hidden=true
+raw = gadcp.io.read_raw_rdi(raw_file.as_posix())
+
+# %% hidden=true
+fig, ax = gv.plot.quickfig(w=10)
+raw.cor.isel(beam=0).gv.tcoarsen(100).gv.tplot(ax=ax)
+
+# %% hidden=true
+mc0 = raw.cor.isel(beam=0).mean(dim='time').data
+plt.plot(range(len(mc0)), mc0, 'ko')
+plt.grid()
+
+# %% hidden=true
+mc = raw.cor.groupby('beam').mean(dim='time')
+mc.plot(hue='beam', marker='o')
+plt.grid()
 
 # %% hidden=true
 dgridparams = dict(dbot=600, dtop=0, d_interval=4)
 ibad = None
 
 # %% hidden=true
-nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
+editparams = dict(maskbins=[0, 1, 16])
+
+# %% hidden=true
+nap.process_adcp(mooring, sn, dgridparams, editparams=editparams, ibad=ibad, n_ensembles=None, save_nc=True)
+
+# %% hidden=true
+# nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 
 # %% hidden=true
 nap.plot_adcp(mooring, sn)
@@ -494,10 +553,10 @@ nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 # %% hidden=true
 nap.plot_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true
+# %% [markdown]
 # ## M3
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN15694
 
 # %% hidden=true
@@ -518,13 +577,13 @@ nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 # %% hidden=true
 nap.plot_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN344
 
 # %% [markdown] hidden=true
 # No data for this instrument.
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN8122
 
 # %% hidden=true
@@ -535,7 +594,7 @@ mooring = 'M3'
 if 0:
     plot_raw_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN12733
 
 # %% hidden=true
@@ -556,7 +615,7 @@ nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 # %% hidden=true
 nap.plot_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true hidden=true
+# %% [markdown] heading_collapsed=true
 # ### SN15339
 
 # %% hidden=true

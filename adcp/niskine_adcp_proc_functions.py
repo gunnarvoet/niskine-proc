@@ -179,6 +179,7 @@ def load_default_parameters():
         max_e=0.2,  # absolute max e
         max_e_deviation=2,  # max in terms of sigma
         min_correlation=64,  # 64 is RDI standard
+        maskbins=None,
     )
 
     tgridparams = dict(
@@ -212,9 +213,11 @@ def process_adcp(
     mooring,
     sn,
     dgridparams,
+    editparams=None,
     ibad=None,
     n_ensembles=None,
     pressure_scale_factor=1,
+    save_nc=True,
 ):
     """Process ADCP data and save to netcdf file.
 
@@ -226,6 +229,10 @@ def process_adcp(
         ADCP serial number.
     dgridparams : dict
         Depth grid parameters with fields dbot, dtop, and d_interval.
+    editparams : dict, optional
+        Provide editing parameters. Defaults to None and then loads optional
+        parameters. Can provide only a few keys and those will be updated in
+        the defaults.
     ibad : int or None, optional
         Bad beam to exclude (zero-based). Defaults to None.
     n_ensembles : int or None, optional
@@ -247,7 +254,12 @@ def process_adcp(
     lon, lat = mooring_lonlat(mooring)
 
     # process
+    editparams_in = editparams
     editparams, tgridparams = load_default_parameters()
+    if editparams_in is not None:
+        for key, value in editparams_in.items():
+            editparams[key] = value
+
     m, mcm, pa, data = gadcp.madcp.proc(
         raw_files_posix,
         lon,
@@ -271,9 +283,15 @@ def process_adcp(
     params = read_params()
     data.attrs["project"] = params["project"]
 
-    # save netcdf
-    name_data_proc = dir_data_out.joinpath(f"{mooring}_{sn}.nc")
-    data.to_netcdf(name_data_proc)
+    if save_nc:
+        # save netcdf
+        name_data_proc = dir_data_out.joinpath(f"{mooring}_{sn}.nc")
+        print(f'saving data to {name_data_proc}')
+        data.to_netcdf(name_data_proc)
+    else:
+        print('not saving data to netcdf')
+        return data
+
 
 
 def load_proc_adcp(mooring, sn):
