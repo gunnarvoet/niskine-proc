@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.13.6
+#       jupytext_version: 1.11.2
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -44,6 +44,11 @@ plt.ion()
 # # NISKINe ADCP data processing
 
 # %% [markdown]
+# Project-specific processing functions are imported from the local `niskine_adcp_proc_functions`.
+#
+# The package `gadcp` wraps the UH `pycurrents` package which must be installed separately from the conda environment provided with this repository. An installation guide for the UH software can be found [here](https://currents.soest.hawaii.edu/ocn_data_analysis/installation.html). Make sure to install the UH software into the same conda environment as the rest of the packages from `environment.yml`.
+
+# %% [markdown]
 # ## Set parameters
 
 # %% [markdown]
@@ -72,103 +77,6 @@ time_offsets = nap.read_time_offsets()
 
 # %%
 time_offsets
-
-
-# %% [markdown]
-# ## Processing function & default parameters
-
-# %%
-def convert_time_stamp(time_np64):
-    # need time stamps in the following format:
-    # end_pc   = (2020, 10,  9, 20, 26,  0)
-    dt = datetime.datetime.utcfromtimestamp(time_np64.tolist()/1e9)
-    return (dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
-
-
-# %%
-def load_default_parameters():
-    editparams = dict(
-        max_e=0.2,  # absolute max e
-        max_e_deviation=2,  # max in terms of sigma
-        min_correlation=64,  # 64 is RDI standard
-    )
-
-    tgridparams = dict(
-        burst_average=True,
-    )
-    return editparams, tgridparams
-
-
-# %%
-def plot_raw_adcp(mooring, sn):
-    dir_data_raw, raw_files, dir_data_out, dir_fig_out = nap.construct_adcp_paths(
-        sn, mooring
-    )
-    raw_files_posix = gadcp.io.read_raw_rdi([file.as_posix() for file in raw_files])
-    gadcp.adcp.plot_raw_adcp(raw_files_posix)
-    name_plot_raw = dir_fig_out.joinpath(f"{mooring}_{sn}_raw")
-    gv.plot.png(name_plot_raw)
-
-
-# %%
-def process_adcp(mooring, sn, dgridparams, ibad=None, n_ensembles=None, pressure_scale_factor=1):
-    dir_data_raw, raw_files, dir_data_out, dir_fig_out = construct_adcp_paths(
-        sn, mooring
-    )
-    raw_files_posix = [file.as_posix() for file in raw_files]
-    insttime = time_offsets.loc[sn].inst.to_datetime64()
-    end_adcp = convert_time_stamp(insttime)
-    utctime = time_offsets.loc[sn].utc.to_datetime64()
-    end_pc = convert_time_stamp(utctime)
-
-    lon, lat = mooring_lonlat(mooring)
-
-    # process
-    editparams, tgridparams = load_default_parameters()
-    m, mcm, pa, data = gadcp.madcp.proc(
-        raw_files_posix,
-        lon,
-        lat,
-        editparams,
-        tgridparams,
-        dgridparams,
-        end_pc,
-        end_adcp,
-        n_ensembles=n_ensembles,
-        ibad=ibad,
-        pressure_scale_factor=pressure_scale_factor,
-        
-    )
-
-    # save netcdf
-    name_data_proc = dir_data_out.joinpath(f"{mooring}_{sn}.nc")
-    data.to_netcdf(name_data_proc)
-
-
-# %%
-def load_proc_adcp(mooring, sn):
-    dir_data_raw, raw_files, dir_data_out, dir_fig_out = construct_adcp_paths(
-        sn, mooring
-    )
-    name_data_proc = dir_data_out.joinpath(f"{mooring}_{sn}.nc")
-    data = xr.open_dataset(name_data_proc)
-    return data
-
-
-# %%
-def plot_adcp(mooring, sn):
-    data = load_proc_adcp(mooring, sn)
-    fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(7.5, 5),
-                       constrained_layout=True, sharey=True, sharex=True)
-    data.u.plot(ax=ax[0])
-    data.v.plot(ax=ax[1])
-    ax[0].invert_yaxis()
-    gv.plot.concise_date_all()
-    [axi.set(xlabel='', ylabel='depth [m]') for axi in ax]
-    name_plot = f"{mooring}_{sn}_uv"
-    gv.plot.png(name_plot)
-    return data
-
 
 # %% [markdown]
 # ## M1
@@ -373,12 +281,6 @@ test = xr.open_dataset('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M
 
 # %% hidden=true
 new = xr.open_dataset('/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/M1/ADCP/proc/SN3109/M1_3109.nc')
-
-# %% hidden=true
-test.w.sel(time='2020-03-12').plot(robust=True)
-
-# %% hidden=true
-new.w.sel(time='2020-03-12').plot(robust=True)
 
 # %% hidden=true
 if 0:
@@ -615,23 +517,23 @@ nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 # %% hidden=true
 nap.plot_adcp(mooring, sn)
 
-# %% [markdown] heading_collapsed=true
+# %% [markdown]
 # ### SN15339
 
-# %% hidden=true
+# %%
 sn = 15339
 mooring = 'M3'
 
-# %% hidden=true
+# %%
 if 0:
     plot_raw_adcp(mooring, sn)
 
-# %% hidden=true
+# %%
 dgridparams = dict(dbot=2950, dtop=2800, d_interval=4)
 ibad = None
 
-# %% hidden=true
+# %%
 nap.process_adcp(mooring, sn, dgridparams, ibad=ibad, n_ensembles=None)
 
-# %% hidden=true
+# %%
 nap.plot_adcp(mooring, sn)
