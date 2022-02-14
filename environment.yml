@@ -17,6 +17,7 @@ dependencies:
   - requests
   - statsmodels
   - cartopy
+  - jupytext
   - pip
   - pip:
     - pyrsktools
