@@ -1,3 +1,4 @@
 *.ipynb
+*.nc
 rbr/fig/
 .DS_Store
