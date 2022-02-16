@@ -1,7 +1,14 @@
-% make a velocity structure for the M1 mooring
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% make a velocity structure for the M velocity moorings for NISKINE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% AFW: 8 July 2021, working version for initial share drive upload
+% AFW: 18 Jan 2022, edited name to include all 3 velocity moorings, edited
+% main path directory
 
 clear
-mainpath = '/Users/awaterhouse/Documents/GitHub/niskine-proc/';
+%mainpath = '/Users/awaterhouse/Documents/GitHub/niskine-proc/';
+mainpath = '/Volumes/GoogleDrive/My Drive/research/niskine/data/mooring/niskine-proc';
 starttime = datenum(2019,5,13,0,0,0);
 endtime = datenum(2020,10,20,0,0,0);
 dt = 60; % in minutes, filtering time
@@ -44,9 +51,9 @@ if 0
     m3path = '/Volumes/Ahua/data_archive/WaveChasers-DataArchive/NISKINE/Moorings/NISKINE19/M3/';
     
     
-    for moor =1:3
+    for moor =1 %:3
         eval(['adcpfiles = dir([m' num2str(moor) 'path ''ADCP/proc/SN*'']);']);
-        for i=1:length(adcpfiles)
+        for i= 1:length(adcpfiles)
             eval(['fnm = [m' num2str(moor) 'path ''ADCP/proc/'' adcpfiles(i).name ''/M' num2str(moor) '_'' adcpfiles(i).name(3:end) ''.nc''];']);
             if exist(fnm,'file')
                 disp(['... reading M' num2str(moor) '_' adcpfiles(i).name(3:end) '.nc']);
@@ -59,7 +66,53 @@ if 0
                 eval(['adcp_' num2str(i) '.v = ncread(fnm,''v'');']);
                 eval(['adcp_' num2str(i) '.temperature = ncread(fnm,''temperature'');']);
                 eval(['adcp_' num2str(i) '.pressure = ncread(fnm,''pressure'');']);
+                eval(['adcp_' num2str(i) '.errorvel = ncread(fnm,''e'');']);
+                eval(['adcp_' num2str(i) '.errorstd = ncread(fnm,''e_std'');']);
+                eval(['adcp_' num2str(i) '.amp = ncread(fnm,''amp'');']);
+                eval(['adcp_' num2str(i) '.pg = ncread(fnm,''pg'');']);
                 
+                if moor==1 && i==4
+                    % edit adcp_4 for moor1
+                    
+                    idremove = adcp_4.amp>170; 
+                    adcp_4.u(idremove)=NaN;
+                    idremove = adcp_4.pg<70; 
+                    adcp_4.u(idremove)=NaN;
+                    adcp_4.v(idremove)=NaN;
+                    
+                    for b=1:length(adcp_4.u)
+                        hasdata=isfinite(interp_missing_data(adcp_4.u(b,:),10));
+                        if sum(hasdata)
+                            lasttoremove = find(hasdata==1,1,'last');
+                            adcp_4.u(b,lasttoremove-1:lasttoremove)= NaN;
+                            adcp_4.v(b,lasttoremove-1:lasttoremove)= NaN;
+                        end
+                    end
+                end
+
+                if moor==1 && i==5
+                    % edit adcp_5 for moor1 to remove the data at the very
+                    % end of the beam (this is the downward looking LR) 
+                    for b=1:length(adcp_5.u)
+                        hasdata=isfinite(interp_missing_data(adcp_5.u(b,:),10));
+                        if sum(hasdata)>2
+                            lasttoremove = find(hasdata==1,1,'last');
+                            adcp_5.u(b,lasttoremove-2:lasttoremove)= NaN;
+                            adcp_5.v(b,lasttoremove-2:lasttoremove)= NaN;
+                        end
+                    end
+                    % this LR has some anomalously bad looking data in the
+                    % ~200 to 300m depth range just after 1 Jan 2020, check
+                    % the various error vels to see what is up
+                    %pause; 
+                    figure;
+                    subplot(511); pcolor(adcp_5.mtime,adcp_5.z,adcp_5.u'); ylim([0 400]); xlim([datenum(2019,12,27) datenum(2020,1,9)]); shading flat; axis ij; 
+                    subplot(512); pcolor(adcp_5.mtime,adcp_5.z,adcp_5.errorvel'); ylim([0 400]); xlim([datenum(2019,12,27) datenum(2020,1,9)]); shading flat; axis ij; 
+                    subplot(513); pcolor(adcp_5.mtime,adcp_5.z,adcp_5.errorstd'); ylim([0 400]); xlim([datenum(2019,12,27) datenum(2020,1,9)]); shading flat; axis ij; 
+                    subplot(514); pcolor(adcp_5.mtime,adcp_5.z,adcp_5.amp'); ylim([0 400]); xlim([datenum(2019,12,27) datenum(2020,1,9)]); shading flat; axis ij; 
+                    subplot(515); pcolor(adcp_5.mtime,adcp_5.z,adcp_5.pg'); ylim([0 400]); xlim([datenum(2019,12,27) datenum(2020,1,9)]); shading flat; axis ij; 
+                end
+                                
                 eval(['m' num2str(moor) '_grid' num2str(i) '.mtime = starttime : datenum(0,0,0,0,dt,0): endtime;']);
                 eval(['m' num2str(moor) '_grid' num2str(i) '.z = 0:dz:3000;']);
                 
@@ -69,11 +122,11 @@ if 0
                 eval(['m' num2str(moor) '_grid' num2str(i) '.t = interp1(adcp_' num2str(i) '.mtime'',adcp_' num2str(i) '.temperature,m' num2str(moor) '_grid' num2str(i) '.mtime);']);
             end
         end
-        clear adcp_*
+        %clear adcp_*
     end
     
     % add flowquest mooring @ M2
-    fqpath='/Users/awaterhouse/Documents/GitHub/niskine-proc/fq/fq_converted/';
+    fqpath=[mainpath '/fq/fq_converted/'];
     load([fqpath 'FQ_InterpolatedFinal.mat']);
     
     FQadcp.dnum = FQadcp.dnum(:,15:end);
@@ -102,6 +155,33 @@ if 0
     end
     
     %%
+    figure;
+    ax(1)=subplot(211);
+    pcolor(adcp_4.mtime,adcp_4.z,adcp_4.u');
+    hold on;
+    pcolor(adcp_5.mtime,adcp_5.z,adcp_5.u');
+    colorbar
+    shading flat
+    caxis([-1 1]*.4)
+    axdate;
+    
+    ax(2)=subplot(212);
+    pcolor(adcp_4.mtime,adcp_4.z,adcp_4.v');
+    colorbar
+    shading flat
+    caxis([-1 1]*.4)
+    axdate;
+    linkaxes(ax,'xy');
+    
+    figure;
+    pcolor(m1_grid1.mtime,m1_grid1.z,m1_grid1.u); shading flat;
+    hold on; pcolor(m1_grid2.mtime,m1_grid2.z,m1_grid2.u); shading flat
+    hold on; pcolor(m1_grid3.mtime,m1_grid3.z,m1_grid3.u); shading flat;
+    hold on; pcolor(m1_grid4.mtime,m1_grid4.z,m1_grid4.u); shading flat;
+    hold on; pcolor(m1_grid5.mtime,m1_grid5.z,m1_grid5.u); shading flat;
+    
+    
+    %% final mooring locations
     % M1:
     % 59° 6.087' N, 21° 11.930' W
     % Depth: 2881m
@@ -114,7 +194,7 @@ if 0
     % 59° 1.813N, 21° 25.043W
     % Depth: 2900m
     
-    for moor = 1:3
+    for moor = 1%:3
         eval(['clear M' num2str(moor)]);
         eval(['M' num2str(moor) '.mtime = m1_grid1.mtime;']);
         eval(['M' num2str(moor) '.z = m1_grid1.z;']);
@@ -243,7 +323,7 @@ if 0
         eval(['M' num2str(moor) '.vf_z = interp2(M' num2str(moor) '.mtime,M' num2str(moor) '.z(1:end-1)''+nanmean(diff(M' num2str(moor) '.z)),diff(M' num2str(moor) '.vf)./(nanmean(diff(M' num2str(moor) '.z))),M' num2str(moor) '.mtime,M1.z''); ']);
         
         
-        eval(['save ../M' num2str(moor) '.mat M' num2str(moor)]);
+        %eval(['save ../M' num2str(moor) '.mat M' num2str(moor)]);
         
     end
 end
