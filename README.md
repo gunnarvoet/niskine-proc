@@ -110,5 +110,20 @@ Some of the processing code lives in a separate repository at https://github.com
 **Issues (solved):** No time offset for **72167**, **76611**. These instruments were downloaded on a computer that misbehaved. Wrong time offset for **72146**, also due to misbehaving computer. Unfortunately, these instruments were not in the included in the clock calibration (warm water dip).
 Time offsets for all three instruments (72146: 12s, 72167: 0s, 76611: 10s) were determined by comparison with a few instruments below.
 
+### Moored Profiler w/ Aquadopp
+
+The MP profiled until 2019-12-29 profile #1123 until the battery voltage dropped too much. The MP error log in `raw/ERRORLOG.TXT` shows zero pressure rate and the profiler restarting the profile for most of the profiles. Could this be the stoppers being placed inside the programmed pressure ranges? This might explain the early battery drain. Additionally, not all profiles are full profiles. During times of strong mooring knockdown, the MP had trouble profiling and covered less vertical distance; at times it was even stuck at one depth level.
+
+Data from the SBE52 CTD on the MP have been processed. Something funky happens to the conductivity cell around yearday 290. A few salinity and density profiles are completely messed up, afterwards we see relatively differences between down- and up-casts that were not apparent before this incident.
+
+**Issues:** Velocity range settings on the Aquadopp may render the velocity dataset unusable. More specifically:
+
+1) The time stamps on the Aquadopp velocity profiles do not match up with the moored profiler time stamps. The time between velocity profiles is only about one hour whereas the sampling period of the MP was 4 hours and 45 minutes. The pressure record from the Aquadopp, however, seems to be fine. We should thus be able to line up CTD and velocity profiles using the pressure records. Here the knockdowns actually come in handy as they provide us calibration points to clearly identify matching profiles along the way.
+
+2) Sound speed of the Aquadopp is calculated based on zero salinity. Not sure if this matters?
+
+3) Coordinate system of the data is ENU - it seems like we should have adjusted Aquadopp settings prior to deployment? I think we just initialized it through the MP firmware. Need to look into this for future deployments.
+
+4) Velocity ranges were set to 0.3 m/s for horizontal velocities and 0.13 m/s for vertical velocities. This might be the killer for the velocity dataset. I see lots of velocities seeming to wrap around near these limits.
 
 ### Chipod
