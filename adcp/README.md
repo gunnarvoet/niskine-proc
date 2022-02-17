@@ -10,6 +10,7 @@ ADCP
   - DONE: Add processed ADCP data to server.
   - Still need to add option for external pressure time series to process ADCPs without pressure record.
   - Update Makefile to include ADCP processing.
+  - Remove trace in SN3110 dataset (similar to SN3109).
 
 [2020-05-24] Ran into a few issues, one of them the wrong pressure record for SN13481. This is now fixed for the time being and I also sent an email to RDI to inquire about this.
 
