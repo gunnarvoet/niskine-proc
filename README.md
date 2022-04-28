@@ -16,6 +16,16 @@ Most ADCPs have been processed.
 
 Some of the processing code lives in a separate repository at https://github.com/gunnarvoet/gadcp. This interfaces heavily with the UH pycurrents module; follow the [instructions](https://currents.soest.hawaii.edu/ocn_data_analysis/installation.html) to install the software.
 
+All data were recorded as single ping for all instruments. Pings were recorded in bursts. Standard processing parameters were
+```
+min_correlation = 64
+max_e = 0.2
+pg_limit = 50
+```
+Single pings were removed based on correlation and error velocity criteria. Percent good was then calculated for each burst average based on the number of good pings in the average and used for further filtering out noisy data.
+
+**Magnetic declination** as applied in the processing is about -11.0 which matches a manual run of `magdec`. Now writing the magdec as used in the processing for each ADCP to the netcdf data structure.
+
 The following is a list of ADCPs and for how long they recorded data.
      
 |  SN |Mooring|Performance|
@@ -37,13 +47,18 @@ The following is a list of ADCPs and for how long they recorded data.
 |15339|M3     |Few days only|
 |15694|M3     |Full record|
 
-Still need to work out a couple issues.
+**SN3109** shows a trace of bad data where the top (steel) float was located, about 70m away from the ADCP. We now filter out the data by masking this bin and interpolate over the gap.
 
-**SN13481** has a full record, however, the pressure time series is not realistic. It does show variations as the nearby pressure time series from other ADCPs but I need to scale it by a factor of about 25 to get to realistic pressure values. We are still in communication with RDI trying to figure out what is going on here.
+**SN9408** has noisy data in bins 6 to about 20 due to fishing long line entangled in the mooring. This matches with notes from the mooring recovery showing long line to about 200m from the instrument. Beam 4 is noisier than beams 1 to 3. We still use the 4-beam solution as otherwise we don't have an error velocity to filter out bad data. A comparison with a 3-beam solution shows that this is the better approach. The percent good limit was increased to 70% for this instrument to filter out more noisy data. This leads to some gaps in the time series, mostly around 150m away from the ADCP, but overall the time series looks good.
 
-**SN8065** and **SN8122** did not have pressure sensors. The processing code still needs to be extended to allow for depth gridding. Since both instruments returned only a few days of data, this has not been higher up on the priority list.
+**SN14408** has a bad beam 2 that has to be masked in the processing, thus there is no error velocity available. Correlation is very low in the deep low-scattering environment and the correlation-based data-filtering is turned off. We thus only rely on a percent good criterion (reduced to 30% good) to filter out questionable data.
 
-**Magnetic declination** at the mooring sites is about -10.9.
+**SN8065** and **SN8122** did not have pressure sensors. We extended the processing code to allow for depth gridding using external pressure time series.
+
+#### Open issues
+We still need to work out one issue:
+**SN13481** has a full record, however, the pressure time series is not realistic. It does show variations as the nearby pressure time series from other ADCPs but we need to scale it by a factor of about 25 to get to realistic pressure values. We are still in communication with RDI trying to figure out what is going on here.
+
 
 ### Flowquest
 Processing done. 
