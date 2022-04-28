@@ -9,12 +9,87 @@ import pandas as pd
 from pathlib import Path
 import datetime
 import yaml
+import logging
 
 import gvpy as gv
 import gadcp
 
-# Set paths
-# NISKINe_data = Path("/Users/gunnar/Projects/niskine/data/Moorings/NISKINE19/")
+# Set up a logger. We can add information to the madcp.proc() log file, but
+# only if adding log entries after the call to madcp.proc().
+logger = logging.getLogger(__name__)
+
+
+class ProcessNISKINeADCP(gadcp.madcp.ProcessADCP):
+    def __init__(
+        self, mooring, sn, dgridparams=None, ibad=None, pressure_scale_factor=1, pressure=None,
+    ):
+        # First we set up some project specific stuff like paths, raw data, meta data etc.
+        (
+            self.dir_data_raw,
+            raw_files,
+            self.dir_data_out,
+            self.dir_fig_out,
+        ) = construct_adcp_paths(sn, mooring)
+        self.mooring = mooring
+        self.sn = sn
+        lon, lat = mooring_lonlat(mooring)
+        params = read_params()
+        meta_data = dict(
+            mooring=mooring, sn=sn, project=params["project"], lon=lon, lat=lat
+        )
+        time_offsets = read_time_offsets()
+        insttime = time_offsets.loc[sn].inst.to_datetime64()
+        end_adcp = convert_time_stamp(insttime)
+        utctime = time_offsets.loc[sn].utc.to_datetime64()
+        end_pc = convert_time_stamp(utctime)
+        driftparams = dict(end_pc=end_pc, end_adcp=end_adcp)
+        editparams, tgridparams = load_default_parameters()
+
+        # Initialize the base class with the parameters.
+        super().__init__(
+            raw_files,
+            meta_data,
+            driftparams=driftparams,
+            dgridparams=dgridparams,
+            tgridparams=tgridparams,
+            editparams=editparams,
+            ibad=ibad,
+            pressure_scale_factor=pressure_scale_factor,
+            pressure=pressure,
+        )
+
+        # We can add logging information from here as well, the logger set up
+        # logger.info("running NISKINe processing")
+
+    def plot_raw_adcp(self, savefig=True):
+        """Plot raw ADCP time series and save figure as png. Wraps
+        `gadcp.adcp.plot_raw_adcp()`. Saves the plot to png.
+
+        Parameters
+        ----------
+        savefig : bool
+            Save figure to data directory structure.
+
+        """
+        mooring = self.meta_data["mooring"]
+        sn = self.meta_data["sn"]
+
+        gadcp.adcp.plot_raw_adcp(self.raw)
+        if savefig:
+            name_plot_raw = self.dir_fig_out.joinpath(f"{mooring}_{sn}_raw")
+            gv.plot.png(name_plot_raw)
+
+    def save_averaged_data(self, name_suffix=None):
+        # save netcdf
+        if name_suffix is not None:
+            file_name = f"{self.mooring}_{self.sn}_{name_suffix}.nc"
+        else:
+            file_name = f"{self.mooring}_{self.sn}.nc"
+        name_data_proc = self.dir_data_out.joinpath(file_name)
+        logger.info(f"Saving time-averaged data to {name_data_proc}")
+        self.ds.to_netcdf(name_data_proc, mode="w")
+        self.ds.close()
+
 
 def save_params(path, project):
     """Save parameters to local yaml file for easy access via other functions.
@@ -52,7 +127,7 @@ def read_params():
 
 
 def construct_adcp_paths(sn, mooring):
-    """ Generate data paths depending on mooring / instrument serial number.
+    """Generate data paths depending on mooring / instrument serial number.
 
     Parameters
     ----------
@@ -279,19 +354,18 @@ def process_adcp(
     data.attrs["lat"] = lat
     data.attrs["mooring"] = mooring
     data.attrs["sn"] = sn
-    data.attrs["proc time"] = np.datetime64('now').astype('str')
+    data.attrs["proc time"] = np.datetime64("now").astype("str")
     params = read_params()
     data.attrs["project"] = params["project"]
 
     if save_nc:
         # save netcdf
         name_data_proc = dir_data_out.joinpath(f"{mooring}_{sn}.nc")
-        print(f'saving data to {name_data_proc}')
+        print(f"saving data to {name_data_proc}")
         data.to_netcdf(name_data_proc)
     else:
-        print('not saving data to netcdf')
+        print("not saving data to netcdf")
         return data
-
 
 
 def load_proc_adcp(mooring, sn):
