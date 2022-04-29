@@ -3,7 +3,7 @@ NISKINe Mooring Data Processing
 
 Python processing files were written in Jupyter notebooks and converted to python scripts using [jupytext](https://jupytext.readthedocs.io/en/latest/). They can be converted back to Jupyter notebooks.
 
-A [conda](https://docs.conda.io/en/latest/) environment with all packages needed for running the python processing scripts can be created by running `conda env create -f environemnt.yml`. The newly created environment will be called `niskine-proc`.
+A [conda](https://docs.conda.io/en/latest/) environment with all packages needed for running the python processing scripts can be created by running `conda env create -f environemnt.yml`. The newly created environment will be called `niskine-proc`. It includes the UH `pycurrents` package such that no further manual installation is necessary.
 
 The `Makefile` bundles a number of data synchronization and processing steps. Note that you need GNU make version 4.3 or higher for this to work properly. On Macs, this can be installed via `brew install make` using [homebrew](https://brew.sh/). Type `make help` to see various options for running the Makefile.
 
@@ -12,17 +12,17 @@ Need to process cast nearby M1.
 
 
 ### ADCP
-Most ADCPs have been processed.
+All ADCPs have been processed.
 
-Some of the processing code lives in a separate repository at https://github.com/gunnarvoet/gadcp. This interfaces heavily with the UH pycurrents module; follow the [instructions](https://currents.soest.hawaii.edu/ocn_data_analysis/installation.html) to install the software.
+Some of the processing code lives in a separate repository at https://github.com/gunnarvoet/gadcp. This interfaces heavily with the [UH pycurrents module](https://currents.soest.hawaii.edu/ocn_data_analysis/installation.html) which is now installed into the `conda` processing environment via `environment.yml`.
 
-All data were recorded as single ping for all instruments. Pings were recorded in bursts. Standard processing parameters were
+All data were recorded as single ping for all instruments. Pings were recorded in bursts. Standard processing parameters used for `gadcp` were
 ```
 min_correlation = 64
 max_e = 0.2
 pg_limit = 50
 ```
-Single pings were removed based on correlation and error velocity criteria. Percent good was then calculated for each burst average based on the number of good pings in the average and used for further filtering out noisy data.
+Single pings were filtered based on correlation and error velocity criteria. Percent good was then calculated for each burst average based on the number of good pings in the average and used for further removing noisy data.
 
 **Magnetic declination** as applied in the processing is about -11.0 which matches a manual run of `magdec`. Now writing the magdec as used in the processing for each ADCP to the netcdf data structure.
 
@@ -47,17 +47,17 @@ The following is a list of ADCPs and for how long they recorded data.
 |15339|M3     |Few days only|
 |15694|M3     |Full record|
 
-**SN3109** shows a trace of bad data where the top (steel) float was located, about 70m away from the ADCP. We now filter out the data by masking this bin and interpolate over the gap.
+**SN3109 (M1)** shows a trace of bad data where the top (steel) float was located, about 70m away from the ADCP. We now filter out the data by masking this bin and then interpolate over the gap.
 
-**SN9408** has noisy data in bins 6 to about 20 due to fishing long line entangled in the mooring. This matches with notes from the mooring recovery showing long line to about 200m from the instrument. Beam 4 is noisier than beams 1 to 3. We still use the 4-beam solution as otherwise we don't have an error velocity to filter out bad data. A comparison with a 3-beam solution shows that this is the better approach. The percent good limit was increased to 70% for this instrument to filter out more noisy data. This leads to some gaps in the time series, mostly around 150m away from the ADCP, but overall the time series looks good.
+**SN9408 (M1)** has noisy data in bins 6 to about 20 due to fishing long line entangled in the mooring. This matches with notes from the mooring recovery showing long line to about 200m from the instrument. Beam 4 is noisier than beams 1 to 3. We still use the 4-beam solution as otherwise we don't have an error velocity to filter out bad data. A comparison with a 3-beam solution shows that this is the better approach. The percent good limit was increased to 70% for this instrument to filter out more noisy data. This leads to some gaps in the time series, mostly around 150m away from the ADCP, but overall the time series looks good.
 
-**SN14408** has a bad beam 2 that has to be masked in the processing, thus there is no error velocity available. Correlation is very low in the deep low-scattering environment and the correlation-based data-filtering is turned off. We thus only rely on a percent good criterion (reduced to 30% good) to filter out questionable data.
+**SN14408 (M1)** has a bad beam 2 that has to be masked in the processing, thus there is no error velocity available. Correlation is very low in the deep low-scattering environment and the correlation-based data-filtering is turned off. We thus only rely on a percent good criterion (reduced to 30% good) to filter out questionable data.
 
-**SN8065** and **SN8122** did not have pressure sensors. We extended the processing code to allow for depth gridding using external pressure time series.
+**SN8065 (M2)** and **SN8122 (M3)** did not have pressure sensors. We extended the processing code to allow for depth gridding using external pressure time series.
 
-#### Open issues
+#### Remaining problems 
 We still need to work out one issue:
-**SN13481** has a full record, however, the pressure time series is not realistic. It does show variations as the nearby pressure time series from other ADCPs but we need to scale it by a factor of about 25 to get to realistic pressure values. We are still in communication with RDI trying to figure out what is going on here.
+**SN13481** has a full record, however, the pressure time series is not realistic. It does show variations as the nearby pressure time series from other ADCPs but we need to scale it by a factor of about 25 to get to realistic pressure values. We are still in communication with RDI trying to figure out what is going on here. For now, the ADCP time series has been processed with a scaled pressure time series which might in the end be all that we can do.
 
 
 ### Flowquest
