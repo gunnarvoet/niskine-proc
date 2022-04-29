@@ -1,4 +1,0 @@
-work mode: 1
-num water ensemble per hour: 12
-power consumption per hour: 816.9654
-ping estimate time: 3.3659
