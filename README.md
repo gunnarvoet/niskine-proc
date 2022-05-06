@@ -66,12 +66,12 @@ Processing done.
 Main issues were to fix the conversion from Instrument velocities to Earth coordinates. See documents in the fq/DocsFromLinkSys on how the "leveled" (E3, in dat files) velocities are converted to Earth coordinates (E4, typically output in dat files). 
 
 Processing is to be run using matlab - 
-1) Flowquest_text2mat_NISKINe.m to read in the fq_converted .DAT.txt files and generate the FQ structure which is saved in fq_converted/ called FQ_output.mat. 
+1) FQ_00_Flowquest_text2mat_NISKINe.m to read in the fq_converted .DAT.txt files and generate the FQ structure which is saved in fq_converted/ called FQ_output.mat. 
 
-2) FQ_ConvertInstrument2Earth.m -- 
+2) FQ_01_ConvertInstrument2Earth.m -- 
 Since the E4 header was missing in the binary and text files from the niskine deployment (header containing all earth coordinate data), the earth coordinate velocity needs to be calculated by hand using the instructions from LinkSys. Using the conversion in the file "Velocity relationship between leveled instrument coordinate and earth coordinate.doc" found in fq/DocsFromLinkSys/, a new output file with Earth coordinate velocity was added in fq_converted/FQ_output_Earth.mat. 
 
-3) FQ_interpolateNewPressure.m -- there is NO PRESSURE sensor in the FQ (confirmed by LinkSys for this S/N). Therefore, the long range ADCP which was moored above the FQ is used to interpolate a realistic pressure. A new (and final) output file is generated from this m-file called: fq_converted/FQ_interpolatedFinal.mat
+3) FQ_02_interpolateNewPressure.m -- there is NO PRESSURE sensor in the FQ (confirmed by LinkSys for this S/N). Therefore, the long range ADCP which was moored above the FQ is used to interpolate a realistic pressure. A new (and final) output file is generated from this m-file called: fq_converted/FQ_interpolatedFinal.mat
 
 Final output files: 
 * fq/fq_converted/FQ_output --> beam and leveled instrument velocities
