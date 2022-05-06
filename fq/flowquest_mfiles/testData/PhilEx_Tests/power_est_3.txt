@@ -1,0 +1,9 @@
+estimated ping period: 3.0599
+transmit power per ensemble period: 46.8748J 68.8521%
+recv+calc power per ensemble period: 17.1256J 25.155%
+ensemble power per ensemble period:2.0601J 3.0259%
+bootup power per ensemble period:0.76956J 1.1304%
+idle mode per ensemble period:1.2504J 1.8367%
+total power per ensemble period: 68.0804J
+total power per hour: 816.9654J
+battery can last about: 82.6228 days
